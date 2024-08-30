@@ -3,69 +3,50 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+ * This class will setup the scene and initialize objects
+ * 
+ * This class inherits from Singleton so any other script can access it easily through GameManager.Instance
+ */
+
 public class GameManager : Singleton<GameManager>
 {
     private MatchablePool pool;
     private MatchableGrid grid;
 
-    [SerializeField] private Vector2Int dimensions;
+    // the dimensions of the matchable grid, set in the inspector
+    [SerializeField] private Vector2Int dimensions = Vector2Int.one;
+
+    // a UI Text Object for displaying the contents of the grid data
+    // for testing and debugging purposes only 
     [SerializeField] private Text gridOutput;
 
+    
     private void Start()
     {
-        pool = (MatchablePool)MatchablePool.Instance;
-        grid = (MatchableGrid)MatchableGrid.Instance;
+        // get references to other important game objects
+        pool = (MatchablePool) MatchablePool.Instance;
+        grid = (MatchableGrid) MatchableGrid.Instance;
 
-        pool.PoolObjects(10);
-
-        //create a grid with set dimensions
-        grid.InitializeGrid(dimensions);
-
-        StartCoroutine(Demo());
+        //Setup the scene
+        StartCoroutine(Setup());
     }
 
-    private IEnumerator Demo()
+    private IEnumerator Setup()
     {
-        // display the grid
-        gridOutput.text = grid.ToString();
-        yield return new WaitForSeconds(2);
+        //put in a loading screne here   
+        
+        // pool the matchables 
+        // size of the pool is based on a worst case scenario of all the matchables matching at the same time
+        // (so double the amount we need)
+        pool.PoolObjects(dimensions.x * dimensions.y * 2);
 
-        //take matchables from the pool
-        Matchable m1 = pool.GetPooledObject();
-        m1.gameObject.SetActive(true);
-        m1.gameObject.name = "a";
-
-        Matchable m2 = pool.GetPooledObject();
-        m2.gameObject.SetActive(true);
-        m2.gameObject.name = "b";
-
-        //put them on the grid
-        grid.PutItemAt(m1, 0, 1);
-        grid.PutItemAt(m2, 2, 3);
-
-        // display the grid
-        gridOutput.text = grid.ToString();
-        yield return new WaitForSeconds(2);
-
-
-        //swap matchables
-        grid.SwapItemsAt(0, 1, 2, 3);
-        gridOutput.text = grid.ToString();
-        yield return new WaitForSeconds(2);
-
-
-        //remove the matchables from the grid
-        grid.RemoveItemAt(0, 1);
-        grid.RemoveItemAt(2, 3);
-        gridOutput.text = grid.ToString();
-        yield return new WaitForSeconds(2);
-
-
-        //return the matchables to the pool
-        pool.ReturnObjectToPool(m1);
-        pool.ReturnObjectToPool(m2);
+        //create a grid 
+        grid.InitializeGrid(dimensions);
 
         yield return null;
+
+        // remove the loading screen here
 
 
     }

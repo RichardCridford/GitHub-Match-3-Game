@@ -648,7 +648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0117a3bba4591cc45b2e8a10b77cc7d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dimensions: {x: 5, y: 5}
+  dimensions: {x: 7, y: 7}
   gridOutput: {fileID: 1231840740}
 --- !u!4 &1295579981
 Transform:
