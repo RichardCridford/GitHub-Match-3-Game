@@ -19,7 +19,7 @@ public class MatchableGrid : GridSystem<Matchable>
             for (int x = 0; x != Dimensions.x; ++x)
             {
                 // get a matchable from the pool
-                newMatchable = pool.GetPooledObject();
+                newMatchable = pool.GetRandomMatchable();
 
                 // position the matchable on screen
                 newMatchable.transform.position = transform.position + new Vector3(x, y);

@@ -456,6 +456,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 6567417202729602108, guid: db0c7ea964022424d9a89357024e662b, type: 3}
+  howManyTypes: 8
+  sprites:
+  - {fileID: -774062931, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
+  - {fileID: 1993481951, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
+  - {fileID: 5925443, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
+  - {fileID: -51481947, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
+  - {fileID: -875861946, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
+  - {fileID: 1006324183, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
+  - {fileID: 2103596306, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
+  - {fileID: -260280395, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
+  colors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &867131783
 GameObject:
   m_ObjectHideFlags: 0
