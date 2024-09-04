@@ -3,6 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/*
+ * These are the things in the grid that the player will match by swapping around
+ * 
+ * They require a sprite to be drawn on the screen
+ * 
+ * The Matchable Type can only be set along with a sprite and colour
+ */
+
 [RequireComponent(typeof(SpriteRenderer))]
 
 public class Matchable : Movable
@@ -19,6 +28,9 @@ public class Matchable : Movable
 
     private SpriteRenderer spriteRenderer;
 
+    // where is this matchable in the grid?
+    public Vector2Int position;
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -32,7 +44,20 @@ public class Matchable : Movable
 
     }
 
+    private void OnMouseDown()
+    {
+        print("Mouse Down at (" + position.x + ", " + position.y + ")");
+    }
 
+    private void OnMouseUp()
+    {
+        print("Mouse Up at (" + position.x + ", " + position.y + ")");
+    }
+
+    private void OnMouseEnter()
+    {
+        print("Mouse Enter at (" + position.x + ", " + position.y + ")");
+    }
 
 
     public override string ToString()
