@@ -6,6 +6,7 @@ public class MatchableGrid : GridSystem<Matchable>
 {
     private MatchablePool pool;
 
+    [SerializeField] private Vector3 offscreenOffset;
 
 
     private void Start()
@@ -22,12 +23,17 @@ public class MatchableGrid : GridSystem<Matchable>
             {
                 // get a matchable from the pool
                 newMatchable = pool.GetRandomMatchable();
+                Vector3 onscreenPosition;
 
                 // position the matchable on screen
-                newMatchable.transform.position = transform.position + new Vector3(x, y);
+                //newMatchable.transform.position = transform.position + new Vector3(x, y);
+
+                onscreenPosition = transform.position + new Vector3(x, y);
+                newMatchable.transform.position = onscreenPosition + offscreenOffset;
 
                 // activate the matchable
                 newMatchable.gameObject.SetActive(true);
+             
 
                 // place the matchable in the grid
                 PutItemAt(newMatchable, x, y);
@@ -46,6 +52,9 @@ public class MatchableGrid : GridSystem<Matchable>
                     }
                 }
 
+                // move the matchable to its onscreen position
+                StartCoroutine(newMatchable.MoveToPosition(onscreenPosition));
+                
                 yield return new WaitForSeconds(0.1f);
 
             }
