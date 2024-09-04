@@ -24,4 +24,13 @@ public class MatchablePool : ObjectPool<Matchable>
         return randomMatchable;
     
     }
+
+    public int NextType(Matchable matchable)
+    {
+        int nextType = (matchable.Type + 1) % howManyTypes;
+
+        matchable.SetType(nextType, sprites[nextType], colors[nextType]);
+
+        return nextType;
+    }
 }

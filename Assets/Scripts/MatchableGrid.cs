@@ -6,12 +6,14 @@ public class MatchableGrid : GridSystem<Matchable>
 {
     private MatchablePool pool;
 
+
+
     private void Start()
     {
         pool = (MatchablePool) MatchablePool.Instance;
     }
 
-    public IEnumerator PopulateGrid()
+    public IEnumerator PopulateGrid(bool allowMatches = false)
     {
         Matchable newMatchable;
 
@@ -30,9 +32,34 @@ public class MatchableGrid : GridSystem<Matchable>
                 // place the matchable in the grid
                 PutItemAt(newMatchable, x, y);
 
+                int type = newMatchable.Type;
+
+                while (!allowMatches && IsPartOfAMatch(newMatchable))
+                {
+                    // change the matchable's type until it isn't a match anymore
+                    if (pool.NextType(newMatchable) == type)
+                    {
+                        Debug.LogWarning("Failed to find a matchable that didn't match at (" + x + ", " + y + ")");
+                        Debug.Break();
+                        break;
+
+                    }
+                }
+
                 yield return new WaitForSeconds(0.1f);
 
             }
+    }
+
+    /*
+     * TODO : Write this function
+     * 
+     */
+
+    private bool IsPartOfAMatch(Matchable matchable)
+    {
+
+        return false;
     }
 }
 
