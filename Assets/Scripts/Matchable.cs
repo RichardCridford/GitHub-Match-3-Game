@@ -16,6 +16,7 @@ using UnityEngine;
 
 public class Matchable : Movable
 {
+    private Cursor cursor;
     private int type;
 
     public int Type
@@ -33,6 +34,7 @@ public class Matchable : Movable
 
     private void Awake()
     {
+        cursor = Cursor.Instance;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -46,7 +48,7 @@ public class Matchable : Movable
 
     private void OnMouseDown()
     {
-        print("Mouse Down at (" + position.x + ", " + position.y + ")");
+        cursor.SelectFirst(this);
     }
 
     private void OnMouseUp()
