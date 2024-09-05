@@ -53,12 +53,14 @@ public class Matchable : Movable
 
     private void OnMouseUp()
     {
-        print("Mouse Up at (" + position.x + ", " + position.y + ")");
+        // if the player clicks without dragging, the selection is cancelled
+        cursor.SelectFirst(null);
     }
 
     private void OnMouseEnter()
     {
-        print("Mouse Enter at (" + position.x + ", " + position.y + ")");
+        // used for swapping matchables
+        cursor.SelectSecond(this);
     }
 
 
