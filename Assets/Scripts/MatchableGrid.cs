@@ -98,13 +98,25 @@ public class MatchableGrid : GridSystem<Matchable>
         yield return StartCoroutine(Swap(copies));
 
         // check for a valid match
-
-        //TODO : complete match validation! 
-
-        // if no match, swap them back
-        StartCoroutine(Swap(copies));
-
+        if (SwapWasValid())
+        {
+            //resolve match
+        }
+        else 
+        {
+            // if no match, swap them back
+            StartCoroutine(Swap(copies));
+        }
     }
+
+
+    private bool SwapWasValid()
+    {
+        return true;
+    }
+
+
+
     private IEnumerator Swap(Matchable[] toBeSwapped)
     {
         // swap them in the grid data structure
