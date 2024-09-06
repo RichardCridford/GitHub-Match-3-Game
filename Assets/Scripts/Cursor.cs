@@ -6,8 +6,11 @@ using UnityEngine;
 
 public class Cursor : Singleton<Cursor>
 {
+    private MatchableGrid grid;
+
     private SpriteRenderer spriteRenderer;
 
+    // which 2 matchables are currently selected?
     private Matchable[] selected;
 
    // variables to stretch the size of the cursor
@@ -32,6 +35,11 @@ public class Cursor : Singleton<Cursor>
         spriteRenderer.enabled = false;
 
         selected = new Matchable[2];
+    }
+
+    private void Start()
+    {
+        grid = (MatchableGrid)MatchableGrid.Instance;
     }
 
     public void SelectFirst(Matchable toSelect)
@@ -62,8 +70,10 @@ public class Cursor : Singleton<Cursor>
         if (!enabled || selected[0] == null || selected[1] == null || !selected[0].Idle || !selected[1].Idle || selected[0] == selected[1])
             return;
 
-        if(SelectedAreAdjacent())
-        print("Swapping matchables at positions : (" + selected[0].position.x + ", " + selected[0].position.y + " ) and ( " + selected[1].position.x + ", " + selected[1].position.y + ")");
+        if (SelectedAreAdjacent())
+            StartCoroutine(grid.TrySwap(selected));
+            
+            //print("Swapping matchables at positions : (" + selected[0].position.x + ", " + selected[0].position.y + " ) and ( " + selected[1].position.x + ", " + selected[1].position.y + ")");
 
         // Used for deselection
         SelectFirst(null);

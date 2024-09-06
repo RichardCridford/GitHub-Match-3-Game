@@ -87,23 +87,46 @@ public class MatchableGrid : GridSystem<Matchable>
         return false;
     }
 
-    public IEnumerator TrySwap(Matchable[] toBeSwapped)
+    public IEnumerator TrySwap(Matchable[] toBeSwapped)       
     {
+        // Make a local copy of what we're swapping so cursor doesn't overwrite
+        Matchable[] copies = new Matchable[2];
+        copies[0] = toBeSwapped[0];
+        copies[1] = toBeSwapped[1];
+
         // yield until matchables animate swapping
-        yield return StartCoroutine(Swap(toBeSwapped));
+        yield return StartCoroutine(Swap(copies));
 
         // check for a valid match
 
         //TODO : complete match validation! 
 
         // if no match, swap them back
-        StartCoroutine(Swap(toBeSwapped));
+        StartCoroutine(Swap(copies));
 
     }
     private IEnumerator Swap(Matchable[] toBeSwapped)
-    { 
+    {
         // swap them in the grid data structure
-    
+        SwapItemsAt(toBeSwapped[0].position, toBeSwapped[1].position);
+
+        // tell the matchables their new positions
+
+        Vector2Int temp = toBeSwapped[0].position;
+        toBeSwapped[0].position = toBeSwapped[1].position;
+        toBeSwapped[1].position = temp;
+
+
+        // get the world positions of both
+        Vector3[] worldPosition = new Vector3[2];
+        worldPosition[0] = toBeSwapped[0].transform.position;
+        worldPosition[1] = toBeSwapped[1].transform.position;
+
+        // move them to new position on screen
+                    StartCoroutine(toBeSwapped[0].MoveToPosition(worldPosition[1]));
+       yield return StartCoroutine(toBeSwapped[1].MoveToPosition(worldPosition[0]));
+
+
     }
 }
 
