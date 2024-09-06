@@ -86,5 +86,24 @@ public class MatchableGrid : GridSystem<Matchable>
 
         return false;
     }
+
+    public IEnumerator TrySwap(Matchable[] toBeSwapped)
+    {
+        // yield until matchables animate swapping
+        yield return StartCoroutine(Swap(toBeSwapped));
+
+        // check for a valid match
+
+        //TODO : complete match validation! 
+
+        // if no match, swap them back
+        StartCoroutine(Swap(toBeSwapped));
+
+    }
+    private IEnumerator Swap(Matchable[] toBeSwapped)
+    { 
+        // swap them in the grid data structure
+    
+    }
 }
 
