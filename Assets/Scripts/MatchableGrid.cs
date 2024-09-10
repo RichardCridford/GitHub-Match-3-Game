@@ -61,9 +61,6 @@ public class MatchableGrid : GridSystem<Matchable>
                 while (!allowMatches && IsPartOfAMatch(newMatchable))
                 {
 
-
-                    Debug.Break();
-                    yield return null;
                     // change the matchable's type until it isn't a match anymore
                     if (pool.NextType(newMatchable) == initialType)
                     {
@@ -82,11 +79,8 @@ public class MatchableGrid : GridSystem<Matchable>
             }
     }
 
-    /*
-     * TODO : Write this function
-     * 
-     */
-
+    
+    // Check that the matchable being populated into the grid is part of a match or not
     private bool IsPartOfAMatch(Matchable toMatch)
     {
         int horizontalMatches   = 0,
@@ -114,6 +108,7 @@ public class MatchableGrid : GridSystem<Matchable>
         return false;
     }
 
+    // Count the number of matches on the grid starting from the matchable to match in the direction indicated
     private int CountMatchesInDirection(Matchable toMatch, Vector2Int direction)
     {
         int matches = 0;
@@ -141,23 +136,42 @@ public class MatchableGrid : GridSystem<Matchable>
         yield return StartCoroutine(Swap(copies));
 
         // check for a valid match
-        if (SwapWasValid())
+        Match[] match = new Match[2];
+
+        matches[0] = GetMatch(copies[0]);
+        matches[1] = GetMatch(copies[1]);
+
+
+
+        if (matches[0] != null)
         {
             //resolve match
+            print(matches[0]);
         }
-        else 
+        if (matches[1] != null)
+        {
+            //resolve match
+            print(matches[1]);
+        }
+
+        // if no match, swap them back
+        if (matches[0] == null && matches[1] == null)
         {
             // if no match, swap them back
             StartCoroutine(Swap(copies));
         }
     }
 
-
-    private bool SwapWasValid()
+    private Match GetMatch(Matchable toMatch)
     {
-        return true;
-    }
+        Match match = new Match(toMatch);
 
+
+        if (match.Count == 1)
+            return null;
+
+        return match;
+    }
 
 
     private IEnumerator Swap(Matchable[] toBeSwapped)

@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03be5c6061b42b84e8ac2c92aa96be6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offscreenOffset: {x: 0, y: 0, z: 0}
+  offscreenOffset: {x: 0, y: 9, z: 0}
 --- !u!4 &676600915
 Transform:
   m_ObjectHideFlags: 0
@@ -476,7 +476,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 6567417202729602108, guid: db0c7ea964022424d9a89357024e662b, type: 3}
-  howManyTypes: 4
+  howManyTypes: 8
   sprites:
   - {fileID: -774062931, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
   - {fileID: 1993481951, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
