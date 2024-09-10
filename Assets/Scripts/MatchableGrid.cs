@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using UnityEditor.Build;
 using UnityEngine;
 
 /*
@@ -54,12 +56,16 @@ public class MatchableGrid : GridSystem<Matchable>
 
                 
                 // what was the initial type of the new matchable?
-                int type = newMatchable.Type;
+                int initialType = newMatchable.Type;
 
                 while (!allowMatches && IsPartOfAMatch(newMatchable))
                 {
+
+
+                    Debug.Break();
+                    yield return null;
                     // change the matchable's type until it isn't a match anymore
-                    if (pool.NextType(newMatchable) == type)
+                    if (pool.NextType(newMatchable) == initialType)
                     {
                         Debug.LogWarning("Failed to find a matchable that didn't match at (" + x + ", " + y + ")");
                         Debug.Break();
@@ -81,11 +87,48 @@ public class MatchableGrid : GridSystem<Matchable>
      * 
      */
 
-    private bool IsPartOfAMatch(Matchable matchable)
+    private bool IsPartOfAMatch(Matchable toMatch)
     {
+        int horizontalMatches   = 0,
+            verticalMatches     = 0;
+
+        // first look to the left
+        horizontalMatches += CountMatchesInDirection(toMatch, Vector2Int.left);
+
+        // then look to the right
+        horizontalMatches += CountMatchesInDirection(toMatch, Vector2Int.right);
+
+        if (horizontalMatches > 1)
+            return true;
+
+        // look up
+        verticalMatches += CountMatchesInDirection(toMatch, Vector2Int.up);
+
+        // look down
+        verticalMatches += CountMatchesInDirection(toMatch, Vector2Int.down);
+
+        if (verticalMatches > 1)
+            return true;
+
 
         return false;
     }
+
+    private int CountMatchesInDirection(Matchable toMatch, Vector2Int direction)
+    {
+        int matches = 0;
+
+        Vector2Int position = toMatch.position + direction;
+
+        while (CheckBounds(position) && !IsEmpty(position) && GetItemAt(position).Type == toMatch.Type)
+        {
+            ++matches;
+            position += direction;
+        }
+        return matches;       
+    }
+
+
 
     public IEnumerator TrySwap(Matchable[] toBeSwapped)       
     {
