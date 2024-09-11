@@ -136,7 +136,7 @@ public class MatchableGrid : GridSystem<Matchable>
         yield return StartCoroutine(Swap(copies));
 
         // check for a valid match
-        Match[] match = new Match[2];
+        Match[] matches = new Match[2];
 
         matches[0] = GetMatch(copies[0]);
         matches[1] = GetMatch(copies[1]);
@@ -166,10 +166,53 @@ public class MatchableGrid : GridSystem<Matchable>
     {
         Match match = new Match(toMatch);
 
+        Match   horizontalMatch,
+                verticalMatch;
+
+        // first get the horizontal matches to the left and right
+        horizontalMatch = GetMatchesInDirection(toMatch, Vector2Int.left);
+        horizontalMatch.Merge(GetMatchesInDirection(toMatch, Vector2Int.right));
+
+        if (horizontalMatch.Count > 1)
+            match.Merge(horizontalMatch);
+
+
+        // then get vertical matches up and down
+        verticalMatch = GetMatchesInDirection(toMatch, Vector2Int.up);
+        verticalMatch.Merge(GetMatchesInDirection(toMatch, Vector2Int.down));
+
+
+        if (verticalMatch.Count > 1)
+           match.Merge(verticalMatch);
+        
+
 
         if (match.Count == 1)
             return null;
 
+        return match;
+    }
+
+    // Add each matching matchable in the direction to a match and return it
+    private Match GetMatchesInDirection(Matchable toMatch, Vector2Int direction)
+    {
+        Match match = new Match();
+        Vector2Int position = toMatch.position + direction;
+        Matchable next;
+
+        while (CheckBounds(position) && !IsEmpty(position))
+        {
+            next = GetItemAt(position);
+
+            if (next.Type == toMatch.Type && next.Idle)
+            {
+                match.AddMatchable(next);
+                position += direction;
+            }
+            else
+                break;
+            
+        }
         return match;
     }
 

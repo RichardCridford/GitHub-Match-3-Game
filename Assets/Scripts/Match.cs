@@ -30,12 +30,18 @@ public class Match
     }
     public Match(Matchable original) : this()
     {
-        Addmatchable(original);
+        AddMatchable(original);
     
     }
     public void AddMatchable(Matchable toAdd)
     {
         matchables.Add(toAdd);
+    }
+
+    public void Merge(Match toMerge)
+    {
+        matchables.AddRange(toMerge.Matchables);
+    
     }
 
     public override string ToString()
