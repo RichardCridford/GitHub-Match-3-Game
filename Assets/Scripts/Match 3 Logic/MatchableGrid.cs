@@ -14,6 +14,8 @@ public class MatchableGrid : GridSystem<Matchable>
     // The pool of Matchables with which to populate the grid
     private MatchablePool pool;
 
+    private ScoreManager score;
+
     // A distance offscreen where the matchables will spawn
     [SerializeField] private Vector3 offscreenOffset;
 
@@ -21,6 +23,8 @@ public class MatchableGrid : GridSystem<Matchable>
     private void Start()
     {
         pool = (MatchablePool) MatchablePool.Instance;
+
+        score = ScoreManager.Instance;
     }
 
     
@@ -142,24 +146,20 @@ public class MatchableGrid : GridSystem<Matchable>
         matches[1] = GetMatch(copies[1]);
 
 
-
+        // if we made valid matches, resolve them
         if (matches[0] != null)
-        {
-            //resolve match
-            print(matches[0]);
-        }
+            StartCoroutine(score.ResolveMatch(matches[0]));
+        
+
         if (matches[1] != null)
-        {
-            //resolve match
-            print(matches[1]);
-        }
+            StartCoroutine(score.ResolveMatch(matches[1]));
+
+
 
         // if no match, swap them back
         if (matches[0] == null && matches[1] == null)
-        {
-            // if no match, swap them back
             StartCoroutine(Swap(copies));
-        }
+        
     }
 
     private Match GetMatch(Matchable toMatch)
