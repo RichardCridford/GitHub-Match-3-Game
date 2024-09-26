@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,9 @@ using UnityEngine.UI;
 public class ScoreManager : Singleton<ScoreManager>
 {
     private MatchableGrid grid;
+
+    [SerializeField]
+    private Transform collectionPoint;
     
     private Text scoreText;
     private int score;
@@ -39,17 +43,26 @@ public class ScoreManager : Singleton<ScoreManager>
 
     public IEnumerator ResolveMatch(Match toResolve)
     {
-        foreach (Matchable matchable in toResolve.Matchables)
+        Matchable matchable;
+
+        for(int i = 0; i != toResolve.Count; ++i )
         {
+            matchable = toResolve.Matchables[i];
+
             // remove the matchables from the grid 
             grid.RemoveItemAt(matchable.position);
 
             // move them off to the side of the screen 
+            if (i == toResolve.Count - 1)
+                yield return StartCoroutine(matchable.Resolve(collectionPoint)); 
+
+            else
+            StartCoroutine(matchable.Resolve(collectionPoint));
 
         }
 
         // update the player's score
-        // Will allow bigger matches to be worth more points
+        // This algorithm Will allow bigger matches to be worth more points
         AddScore(toResolve.Count * toResolve.Count);
 
         yield return null;    
