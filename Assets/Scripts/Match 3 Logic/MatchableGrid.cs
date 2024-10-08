@@ -37,50 +37,51 @@ public class MatchableGrid : GridSystem<Matchable>
     // Work through each grid position
         for(int y = 0; y != Dimensions.y; ++y)
             for (int x = 0; x != Dimensions.x; ++x)
-            {
-                // get a matchable from the pool
-                newMatchable = pool.GetRandomMatchable();
-                Vector3 onscreenPosition;
+                if(IsEmpty(x, y))
+                {
+                    // get a matchable from the pool
+                    newMatchable = pool.GetRandomMatchable();
+                    Vector3 onscreenPosition;
 
-                // calculate the future on screen position of the matchable
-                onscreenPosition = transform.position + new Vector3(x, y);
+                    // calculate the future on screen position of the matchable
+                    onscreenPosition = transform.position + new Vector3(x, y);
 
-                // position the matchable off screen
-                newMatchable.transform.position = onscreenPosition + offscreenOffset;
+                    // position the matchable off screen
+                    newMatchable.transform.position = onscreenPosition + offscreenOffset;
 
-                 // activate the matchable
-                newMatchable.gameObject.SetActive(true);
+                     // activate the matchable
+                    newMatchable.gameObject.SetActive(true);
 
-                // tell the matchable where it is on the grid
-                newMatchable.position = new Vector2Int(x, y);
+                    // tell the matchable where it is on the grid
+                    newMatchable.position = new Vector2Int(x, y);
              
 
-                // place the matchable in the grid
-                PutItemAt(newMatchable, x, y);
+                    // place the matchable in the grid
+                    PutItemAt(newMatchable, x, y);
 
                 
-                // what was the initial type of the new matchable?
-                int initialType = newMatchable.Type;
+                    // what was the initial type of the new matchable?
+                    int initialType = newMatchable.Type;
 
-                while (!allowMatches && IsPartOfAMatch(newMatchable))
-                {
-
-                    // change the matchable's type until it isn't a match anymore
-                    if (pool.NextType(newMatchable) == initialType)
+                    while (!allowMatches && IsPartOfAMatch(newMatchable))
                     {
-                        Debug.LogWarning("Failed to find a matchable that didn't match at (" + x + ", " + y + ")");
-                        Debug.Break();
-                        break;
 
+                        // change the matchable's type until it isn't a match anymore
+                        if (pool.NextType(newMatchable) == initialType)
+                        {
+                            Debug.LogWarning("Failed to find a matchable that didn't match at (" + x + ", " + y + ")");
+                            Debug.Break();
+                            break;
+
+                        }
                     }
-                }
 
-                // move the matchable to its onscreen position
-                StartCoroutine(newMatchable.MoveToPosition(onscreenPosition));
+                    // move the matchable to its onscreen position
+                    StartCoroutine(newMatchable.MoveToPosition(onscreenPosition));
                 
-                yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(0.1f);
 
-            }
+                }
     }
 
     
@@ -159,6 +160,9 @@ public class MatchableGrid : GridSystem<Matchable>
         // if no match, swap them back
         if (matches[0] == null && matches[1] == null)
             StartCoroutine(Swap(copies));
+
+        else
+            StartCoroutine(PopulateGrid(true));
         
     }
 
