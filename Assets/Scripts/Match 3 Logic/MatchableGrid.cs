@@ -162,8 +162,36 @@ public class MatchableGrid : GridSystem<Matchable>
             StartCoroutine(Swap(copies));
 
         else
+        // After the match, start to fill in the space left over
+        {
+            CollapseGrid();
             StartCoroutine(PopulateGrid(true));
-        
+        }   
+    }
+
+    // coroutine that swaps 2 matchables in the grid
+    private IEnumerator Swap(Matchable[] toBeSwapped)
+    {
+        // swap them in the grid data structure
+        SwapItemsAt(toBeSwapped[0].position, toBeSwapped[1].position);
+
+        // tell the matchables their new positions
+
+        Vector2Int temp = toBeSwapped[0].position;
+        toBeSwapped[0].position = toBeSwapped[1].position;
+        toBeSwapped[1].position = temp;
+
+
+        // get the world positions of both
+        Vector3[] worldPosition = new Vector3[2];
+        worldPosition[0] = toBeSwapped[0].transform.position;
+        worldPosition[1] = toBeSwapped[1].transform.position;
+
+        // move them to new position on screen
+        StartCoroutine(toBeSwapped[0].MoveToPosition(worldPosition[1]));
+        yield return StartCoroutine(toBeSwapped[1].MoveToPosition(worldPosition[0]));
+
+
     }
 
     private Match GetMatch(Matchable toMatch)
@@ -220,29 +248,34 @@ public class MatchableGrid : GridSystem<Matchable>
         return match;
     }
 
-
-    private IEnumerator Swap(Matchable[] toBeSwapped)
+    private void CollapseGrid()
     {
-        // swap them in the grid data structure
-        SwapItemsAt(toBeSwapped[0].position, toBeSwapped[1].position);
+        for (int x = 0; x != Dimensions.x; ++x)
+            for (int yEmpty = 0; yEmpty != Dimensions.y - 1; ++yEmpty)
+                if (IsEmpty(x, yEmpty))
+                    for (int yNotEmpty = yEmpty + 1; yNotEmpty != Dimensions.y; ++yNotEmpty)
+                        if (!IsEmpty(x, yNotEmpty) && GetItemAt(x, yNotEmpty).Idle)
+                        {
+                            // Move the Matchable from NotEmpty to Empty
+                            break;
+                        
+                        }
+    }
 
-        // tell the matchables their new positions
+    private void MoveMatchableToPosition(Matchable toMove, int x, int y)
+    {
+        // remove the matchable from its original grid position
+        RemoveItemAt(toMove.position);
 
-        Vector2Int temp = toBeSwapped[0].position;
-        toBeSwapped[0].position = toBeSwapped[1].position;
-        toBeSwapped[1].position = temp;
+        // place the matchable at its new position
+        PutItemAt(toMove, x, y);
 
+        // update the matchable's internal grid position
+        toMove.position = new Vector2Int(x, y);
 
-        // get the world positions of both
-        Vector3[] worldPosition = new Vector3[2];
-        worldPosition[0] = toBeSwapped[0].transform.position;
-        worldPosition[1] = toBeSwapped[1].transform.position;
-
-        // move them to new position on screen
-                    StartCoroutine(toBeSwapped[0].MoveToPosition(worldPosition[1]));
-       yield return StartCoroutine(toBeSwapped[1].MoveToPosition(worldPosition[0]));
-
-
+        // start animation to move it on screen
+        StartCoroutine(toMove.MoveToPosition(transform.position + new Vector3(x, y)));
+    
     }
 }
 
