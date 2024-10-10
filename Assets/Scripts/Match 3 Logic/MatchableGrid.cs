@@ -250,13 +250,20 @@ public class MatchableGrid : GridSystem<Matchable>
 
     private void CollapseGrid()
     {
+        /* go through each column left ot right,
+         * search from bottom up to find an empty space,
+         * then look above the empty space, and up through the rest of the column,
+         * until you find a non empty space.
+         * Move the matchable at the non empty space into the empty space,
+         * then continue looking for emty spaces
+         * */ 
         for (int x = 0; x != Dimensions.x; ++x)
             for (int yEmpty = 0; yEmpty != Dimensions.y - 1; ++yEmpty)
                 if (IsEmpty(x, yEmpty))
                     for (int yNotEmpty = yEmpty + 1; yNotEmpty != Dimensions.y; ++yNotEmpty)
                         if (!IsEmpty(x, yNotEmpty) && GetItemAt(x, yNotEmpty).Idle)
                         {
-                            // Move the Matchable from NotEmpty to Empty
+                            MoveMatchableToPosition(GetItemAt(x, yNotEmpty), x, yEmpty);
                             break;
                         
                         }
@@ -264,11 +271,9 @@ public class MatchableGrid : GridSystem<Matchable>
 
     private void MoveMatchableToPosition(Matchable toMove, int x, int y)
     {
-        // remove the matchable from its original grid position
-        RemoveItemAt(toMove.position);
-
-        // place the matchable at its new position
-        PutItemAt(toMove, x, y);
+      
+        // move the matchable to its new position in the grid
+        MoveItemTo(toMove.position, new Vector2Int(x, y));
 
         // update the matchable's internal grid position
         toMove.position = new Vector2Int(x, y);
