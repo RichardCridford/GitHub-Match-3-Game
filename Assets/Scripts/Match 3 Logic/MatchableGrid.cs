@@ -32,16 +32,20 @@ public class MatchableGrid : GridSystem<Matchable>
     // Optionally allow or not allow matches when populating
     public IEnumerator PopulateGrid(bool allowMatches = false)
     {
-        Matchable newMatchable;
+        // list of new matchables added during population
+        List<Matchable> newmatchables = new List<Matchable>();
 
-    // Work through each grid position
-        for(int y = 0; y != Dimensions.y; ++y)
+        Matchable newMatchable;
+        Vector3 onscreenPosition;
+
+        // Work through each grid position
+        for (int y = 0; y != Dimensions.y; ++y)
             for (int x = 0; x != Dimensions.x; ++x)
                 if(IsEmpty(x, y))
                 {
                     // get a matchable from the pool
                     newMatchable = pool.GetRandomMatchable();
-                    Vector3 onscreenPosition;
+                    
 
                     // calculate the future on screen position of the matchable
                     onscreenPosition = transform.position + new Vector3(x, y);
@@ -58,6 +62,8 @@ public class MatchableGrid : GridSystem<Matchable>
 
                     // place the matchable in the grid
                     PutItemAt(newMatchable, x, y);
+
+                    // add the matchable to the list
 
                 
                     // what was the initial type of the new matchable?
@@ -79,9 +85,12 @@ public class MatchableGrid : GridSystem<Matchable>
                     // move the matchable to its onscreen position
                     StartCoroutine(newMatchable.MoveToPosition(onscreenPosition));
                 
+                    // pause for 1/10th second for cool effect
                     yield return new WaitForSeconds(0.1f);
 
                 }
+
+        yield return null;
     }
 
     
@@ -165,7 +174,9 @@ public class MatchableGrid : GridSystem<Matchable>
         // After the match, start to fill in the space left over
         {
             CollapseGrid();
-            StartCoroutine(PopulateGrid(true));
+            yield return StartCoroutine(PopulateGrid(true));
+            //scan the grid for chain reactions
+            ScanForMatches();
         }   
     }
 
@@ -281,6 +292,33 @@ public class MatchableGrid : GridSystem<Matchable>
         // start animation to move it on screen
         StartCoroutine(toMove.MoveToPosition(transform.position + new Vector3(x, y)));
     
+    }
+
+    // scane the grid for any matches and resolve them 
+    private void ScanForMatches()
+    {
+        Matchable toMatch;
+        Match match;
+
+        // iterate through the grid, looking for non-empty and idle matchables
+        
+        for(int y = 0; y != Dimensions.y; ++y)
+            for (int x = 0; x != Dimensions.y; ++x)
+                if(!IsEmpty(x, y))
+                {
+                    toMatch = GetItemAt(x, y);
+
+                    if (!toMatch.Idle)
+                        continue;
+                   // try to match and resolve
+                   match = GetMatch(toMatch);
+
+                    if (match != null)
+                        StartCoroutine(score.ResolveMatch(match));
+
+
+                }
+
     }
 }
 
