@@ -30,10 +30,10 @@ public class MatchableGrid : GridSystem<Matchable>
     
     // Populate the grid with matchables from the pool
     // Optionally allow or not allow matches when populating
-    public IEnumerator PopulateGrid(bool allowMatches = false)
+    public IEnumerator PopulateGrid(bool allowMatches = false, bool initialPopulation = false)
     {
         // list of new matchables added during population
-        List<Matchable> newmatchables = new List<Matchable>();
+        List<Matchable> newMatchables = new List<Matchable>();
 
         Matchable newMatchable;
         Vector3 onscreenPosition;
@@ -45,13 +45,9 @@ public class MatchableGrid : GridSystem<Matchable>
                 {
                     // get a matchable from the pool
                     newMatchable = pool.GetRandomMatchable();
-                    
-
-                    // calculate the future on screen position of the matchable
-                    onscreenPosition = transform.position + new Vector3(x, y);
-
+                   
                     // position the matchable off screen
-                    newMatchable.transform.position = onscreenPosition + offscreenOffset;
+                    newMatchable.transform.position = new Vector3 (x,y) + offscreenOffset;
 
                      // activate the matchable
                     newMatchable.gameObject.SetActive(true);
@@ -64,6 +60,7 @@ public class MatchableGrid : GridSystem<Matchable>
                     PutItemAt(newMatchable, x, y);
 
                     // add the matchable to the list
+                    newMatchables.Add(newMatchable);
 
                 
                     // what was the initial type of the new matchable?
@@ -81,16 +78,25 @@ public class MatchableGrid : GridSystem<Matchable>
 
                         }
                     }
-
-                    // move the matchable to its onscreen position
-                    StartCoroutine(newMatchable.MoveToPosition(onscreenPosition));
-                
-                    // pause for 1/10th second for cool effect
-                    yield return new WaitForSeconds(0.1f);
-
                 }
 
-        yield return null;
+       // move each matchable to its onscreen position, yielding until the last has finished
+       for(int i = 0; i != newMatchables.Count; ++i)
+       {
+            // calculate the future on screen position of the matchable
+            onscreenPosition = transform.position + new Vector3(newMatchables[i].position.x, newMatchables[i].position.y);
+
+            // move the matchable to its onscreen position
+            if (i == newMatchables.Count - 1)
+                yield return StartCoroutine(newMatchables[i].MoveToPosition(onscreenPosition));
+
+            else
+                StartCoroutine(newMatchables[i].MoveToPosition(onscreenPosition));
+
+            // pause for 1/10th second for cool effect
+            if (initialPopulation)
+                yield return new WaitForSeconds(0.1f);
+        }
     }
 
     
