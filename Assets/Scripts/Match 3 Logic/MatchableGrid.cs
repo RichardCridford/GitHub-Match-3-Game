@@ -174,16 +174,28 @@ public class MatchableGrid : GridSystem<Matchable>
 
         // if no match, swap them back
         if (matches[0] == null && matches[1] == null)
-            StartCoroutine(Swap(copies));
-
-        else
-        // After the match, start to fill in the space left over
         {
-            CollapseGrid();
-            yield return StartCoroutine(PopulateGrid(true));
-            //scan the grid for chain reactions
-            ScanForMatches();
-        }   
+            yield return StartCoroutine(Swap(copies));
+
+            if(ScanForMatches())
+                StartCoroutine(FillAndScanGrid());
+        }
+        else
+            // After the match, start to fill in the space left over
+            StartCoroutine(FillAndScanGrid());
+         
+    }
+
+    private IEnumerator FillAndScanGrid()
+    {
+        CollapseGrid();
+        yield return StartCoroutine(PopulateGrid(true));
+
+        // scan the grid for chain reactions
+        if (ScanForMatches())
+            // rescursive routine  
+            StartCoroutine(FillAndScanGrid());
+
     }
 
     // coroutine that swaps 2 matchables in the grid
@@ -301,8 +313,9 @@ public class MatchableGrid : GridSystem<Matchable>
     }
 
     // scane the grid for any matches and resolve them 
-    private void ScanForMatches()
+    private bool ScanForMatches()
     {
+        bool madeAMatch = false;
         Matchable toMatch;
         Match match;
 
@@ -320,10 +333,15 @@ public class MatchableGrid : GridSystem<Matchable>
                    match = GetMatch(toMatch);
 
                     if (match != null)
+                    {
+                        madeAMatch = true;
                         StartCoroutine(score.ResolveMatch(match));
+                    }
+                        
 
 
                 }
+        return madeAMatch;
 
     }
 }
