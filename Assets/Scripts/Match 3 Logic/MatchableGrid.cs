@@ -231,8 +231,8 @@ public class MatchableGrid : GridSystem<Matchable>
                 verticalMatch;
 
         // first get the horizontal matches to the left and right
-        horizontalMatch = GetMatchesInDirection(toMatch, Vector2Int.left);
-        horizontalMatch.Merge(GetMatchesInDirection(toMatch, Vector2Int.right));
+        horizontalMatch = GetMatchesInDirection(match, toMatch, Vector2Int.left);
+        horizontalMatch.Merge(GetMatchesInDirection(match, toMatch, Vector2Int.right));
 
         horizontalMatch.orientation = Orientation.horizontal;
 
@@ -246,8 +246,8 @@ public class MatchableGrid : GridSystem<Matchable>
 
 
         // then get vertical matches up and down
-        verticalMatch = GetMatchesInDirection(toMatch, Vector2Int.up);
-        verticalMatch.Merge(GetMatchesInDirection(toMatch, Vector2Int.down));
+        verticalMatch = GetMatchesInDirection(match, toMatch, Vector2Int.up);
+        verticalMatch.Merge(GetMatchesInDirection(match, toMatch, Vector2Int.down));
 
         verticalMatch.orientation = Orientation.vertical;
 
@@ -275,8 +275,8 @@ public class MatchableGrid : GridSystem<Matchable>
 
         foreach(Matchable matchable in branchToSearch.Matchables)
         {
-            branch = GetMatchesInDirection(matchable, perpendicular == Orientation.horizontal ? Vector2Int.left : Vector2Int.down);
-            branch.Merge(GetMatchesInDirection(matchable, perpendicular == Orientation.horizontal ? Vector2Int.right : Vector2Int.up));
+            branch = GetMatchesInDirection(tree, matchable, perpendicular == Orientation.horizontal ? Vector2Int.left : Vector2Int.down);
+            branch.Merge(GetMatchesInDirection(tree, matchable, perpendicular == Orientation.horizontal ? Vector2Int.right : Vector2Int.up));
 
             branch.orientation = perpendicular;
 
@@ -289,7 +289,7 @@ public class MatchableGrid : GridSystem<Matchable>
     }
 
     // Add each matching matchable in the direction to a match and return it
-    private Match GetMatchesInDirection(Matchable toMatch, Vector2Int direction)
+    private Match GetMatchesInDirection(Match tree, Matchable toMatch, Vector2Int direction)
     {
         Match match = new Match();
         Vector2Int position = toMatch.position + direction;
@@ -301,7 +301,12 @@ public class MatchableGrid : GridSystem<Matchable>
 
             if (next.Type == toMatch.Type && next.Idle)
             {
-                match.AddMatchable(next);
+                if (!tree.Contains(next))
+                    match.AddMatchable(next);
+
+                else
+                    match.AddUnlisted();
+                
                 position += direction;
             }
             else
