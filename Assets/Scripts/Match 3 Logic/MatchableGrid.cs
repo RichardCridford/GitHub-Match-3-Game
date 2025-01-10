@@ -234,17 +234,30 @@ public class MatchableGrid : GridSystem<Matchable>
         horizontalMatch = GetMatchesInDirection(toMatch, Vector2Int.left);
         horizontalMatch.Merge(GetMatchesInDirection(toMatch, Vector2Int.right));
 
+        horizontalMatch.orientation = Orientation.horizontal;
+
         if (horizontalMatch.Count > 1)
+        {
             match.Merge(horizontalMatch);
+            // scan for vertical branches
+        }
+            
 
 
         // then get vertical matches up and down
         verticalMatch = GetMatchesInDirection(toMatch, Vector2Int.up);
         verticalMatch.Merge(GetMatchesInDirection(toMatch, Vector2Int.down));
 
+        verticalMatch.orientation = Orientation.vertical;
+
 
         if (verticalMatch.Count > 1)
-           match.Merge(verticalMatch);
+        {
+            match.Merge(verticalMatch);
+            // scan for horizontal branches
+        }
+            
+            
         
 
 
@@ -252,6 +265,11 @@ public class MatchableGrid : GridSystem<Matchable>
             return null;
 
         return match;
+    }
+
+    private void GetBranches(Match tree, Match branchToSearch, Orientation perpendicular)
+    {
+
     }
 
     // Add each matching matchable in the direction to a match and return it
