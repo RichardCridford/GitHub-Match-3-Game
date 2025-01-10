@@ -15,7 +15,7 @@ public enum Orientation
 public class Match
 {
     // is this match horizontal or vertical?
-    public Orientation orientation;
+    public Orientation orientation = Orientation.none;
 
     // the internal list of matched matchables
     private List<Matchable> matchables;
