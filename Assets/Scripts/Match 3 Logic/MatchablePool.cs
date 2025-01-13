@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 public class MatchablePool : ObjectPool<Matchable>
@@ -32,5 +33,10 @@ public class MatchablePool : ObjectPool<Matchable>
         matchable.SetType(nextType, sprites[nextType], colors[nextType]);
 
         return nextType;
+    }
+
+    public void ChangeType(Matchable toChange, int type)
+    {
+        toChange.SetType(type, sprites[type], colors[type]);
     }
 }

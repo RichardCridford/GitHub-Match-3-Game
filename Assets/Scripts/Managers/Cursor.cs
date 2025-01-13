@@ -2,10 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * This class will draw the cursor where it needs to be and handle input processing
+ * This class is a Singleton so any other sclass can get a reference to this through instance
+ * It requires a sprite renderer to be used with a 9 slice 1 Unity unit in size
+ * 
+ */
+
 [RequireComponent(typeof(SpriteRenderer))]
 
 public class Cursor : Singleton<Cursor>
 {
+    public bool cheatMode;
+
+    private MatchablePool pool;
     private MatchableGrid grid;
 
     private SpriteRenderer spriteRenderer;
@@ -39,9 +49,43 @@ public class Cursor : Singleton<Cursor>
 
     private void Start()
     {
+        pool = (MatchablePool)MatchablePool.Instance;
         grid = (MatchableGrid)MatchableGrid.Instance;
     }
 
+    private void Update()
+    {
+        if (!cheatMode || selected[0] == null)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            pool.ChangeType(selected[0], 0);
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            pool.ChangeType(selected[0], 1);
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            pool.ChangeType(selected[0], 2);
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+            pool.ChangeType(selected[0], 3);
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+            pool.ChangeType(selected[0], 4);
+
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+            pool.ChangeType(selected[0], 5);
+
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+            pool.ChangeType(selected[0], 6);
+
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+            pool.ChangeType(selected[0], 7);
+
+
+
+    }
+    // select the list of 2 mathcbales, move the cursor to it, reset the size, activate the sprite
     public void SelectFirst(Matchable toSelect)
     {
         // put the matchable selected into the array 
