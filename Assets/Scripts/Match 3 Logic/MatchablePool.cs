@@ -9,6 +9,8 @@ public class MatchablePool : ObjectPool<Matchable>
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private Color[] colors;
 
+    [SerializeField] private Sprite match4Powerup;
+
     public void RandomizeType(Matchable toRandomize)
     {
         int random = Random.Range (0, howManyTypes);
