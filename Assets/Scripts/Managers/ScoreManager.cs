@@ -5,6 +5,16 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+ * This class will manage the player's score and resolving matches.
+ * 
+ * This is a Singleton, only one exists in a scene and can be accessed through Instance
+ * 
+ * This is attached to a Text UI element 
+ */
+
+
+
 [RequireComponent(typeof(Text))] 
 public class ScoreManager : Singleton<ScoreManager>
 {
@@ -13,7 +23,10 @@ public class ScoreManager : Singleton<ScoreManager>
     [SerializeField]
     private Transform collectionPoint;
     
+    // UI element for displaying the score
     private Text scoreText;
+
+    // actual score, with getter 
     private int score;
 
     public int Score
@@ -25,6 +38,7 @@ public class ScoreManager : Singleton<ScoreManager>
     
     }
 
+    // get references during Awake
     protected override void Init()
     {
         scoreText = GetComponent<Text>();
@@ -35,16 +49,19 @@ public class ScoreManager : Singleton<ScoreManager>
         grid = (MatchableGrid)MatchableGrid.Instance;
     }
 
+    // add an amount to the score and update the UI Text
     public void AddScore(int amount)
     {
         score += amount;
         scoreText.text = "Score : " + score;
     }
 
+    // coroutine for resolving a match
     public IEnumerator ResolveMatch(Match toResolve)
     {
         Matchable matchable;
 
+        // iterate through every matchable in a match
         for(int i = 0; i != toResolve.Count; ++i )
         {
             matchable = toResolve.Matchables[i];
@@ -53,6 +70,7 @@ public class ScoreManager : Singleton<ScoreManager>
             grid.RemoveItemAt(matchable.position);
 
             // move them off to the side of the screen 
+            // and wait for the last one to finish
             if (i == toResolve.Count - 1)
                 yield return StartCoroutine(matchable.Resolve(collectionPoint)); 
 
