@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 
+/*
+ * This is a pool of matachables which will instantiate during load time. 
+ * Remember to activate each game object before requesting a new one. 
+ * This class is a Singleton that can be accessed through the Instance.
+ * 
+ * This class also handles the types, sprites and colours of new matchables.
+ * This type can be randomised or incremented.
+ */
+
 public class MatchablePool : ObjectPool<Matchable>
 {
     [SerializeField] private int howManyTypes;
@@ -18,6 +27,7 @@ public class MatchablePool : ObjectPool<Matchable>
     
     }
 
+    // Get a matchable from the pool and randomise its type. 
     public Matchable GetRandomMatchable()
     {
         Matchable randomMatchable = GetPooledObject();
@@ -27,7 +37,8 @@ public class MatchablePool : ObjectPool<Matchable>
         return randomMatchable;
     
     }
-
+    
+    // Increment the type of matchable and return its new type.
     public int NextType(Matchable matchable)
     {
         int nextType = (matchable.Type + 1) % howManyTypes;
@@ -37,6 +48,14 @@ public class MatchablePool : ObjectPool<Matchable>
         return nextType;
     }
 
+    public Matchable UpgradeMatchable(Matchable toBeUpgraded)
+    {
+        toBeUpgraded.Upgrade(match4Powerup);
+        
+        return toBeUpgraded;
+    }
+    
+    // Manually set the type of matchable, used for testing obscure cases.
     public void ChangeType(Matchable toChange, int type)
     {
         toChange.SetType(type, sprites[type], colors[type]);

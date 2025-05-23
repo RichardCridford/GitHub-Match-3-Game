@@ -34,6 +34,7 @@ public class Matchable : Movable
     // where is this matchable in the grid?
     public Vector2Int position;
 
+    // get required references during awake.
     private void Awake()
     {
         cursor = Cursor.Instance;
@@ -41,6 +42,7 @@ public class Matchable : Movable
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    // set the type, sprite and colour all at once, performed by the pool
     public void SetType(int type, Sprite sprite, Color color)
     {
         this.type = type;
@@ -66,6 +68,12 @@ public class Matchable : Movable
 
     }
 
+    public void Upgrade(Sprite powerupSprite)
+    {
+        spriteRenderer.sprite = powerupSprite;
+    }
+
+    // when the player clicks, select this as the first selected
     private void OnMouseDown()
     {
         cursor.SelectFirst(this);
@@ -77,6 +85,7 @@ public class Matchable : Movable
         cursor.SelectFirst(null);
     }
 
+    // when the player drags the mouse, select this as second selected
     private void OnMouseEnter()
     {
         // used for swapping matchables
@@ -88,4 +97,6 @@ public class Matchable : Movable
     {
         return gameObject.name;
     }
+
+
 }
