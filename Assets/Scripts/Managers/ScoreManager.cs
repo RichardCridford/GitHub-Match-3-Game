@@ -18,6 +18,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Text))] 
 public class ScoreManager : Singleton<ScoreManager>
 {
+    private MatchablePool pool;
     private MatchableGrid grid;
 
     [SerializeField]
@@ -46,7 +47,8 @@ public class ScoreManager : Singleton<ScoreManager>
 
     private void Start()
     {
-        grid = (MatchableGrid)MatchableGrid.Instance;
+        pool = (MatchablePool) MatchablePool.Instance;
+        grid = (MatchableGrid) MatchableGrid.Instance;
     }
 
     // add an amount to the score and update the UI Text
@@ -59,7 +61,17 @@ public class ScoreManager : Singleton<ScoreManager>
     // coroutine for resolving a match
     public IEnumerator ResolveMatch(Match toResolve)
     {
+        Matchable powerup;
         Matchable matchable;
+        
+
+        // if a larger match is made, create a powerup
+        if (toResolve.Count == 4)
+        {
+            powerup = pool.UpgradeMatchable(toResolve.ToBeUpgraded);
+
+            toResolve.RemoveMatchable(powerup);
+        }
 
         // iterate through every matchable in a match
         for(int i = 0; i != toResolve.Count; ++i )
