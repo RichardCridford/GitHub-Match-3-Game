@@ -61,8 +61,10 @@ public class ScoreManager : Singleton<ScoreManager>
     // coroutine for resolving a match
     public IEnumerator ResolveMatch(Match toResolve)
     {
-        Matchable powerup;
+        Matchable powerup = null;
         Matchable matchable;
+
+        Transform target = collectionPoint;
         
 
         // if a larger match is made, create a powerup
@@ -71,6 +73,10 @@ public class ScoreManager : Singleton<ScoreManager>
             powerup = pool.UpgradeMatchable(toResolve.ToBeUpgraded);
 
             toResolve.RemoveMatchable(powerup);
+
+            target = powerup.transform;
+
+            powerup.SortingOrder = 3;
         }
 
         // iterate through every matchable in a match
@@ -84,16 +90,22 @@ public class ScoreManager : Singleton<ScoreManager>
             // move them off to the side of the screen 
             // and wait for the last one to finish
             if (i == toResolve.Count - 1)
-                yield return StartCoroutine(matchable.Resolve(collectionPoint)); 
+                yield return StartCoroutine(matchable.Resolve(target)); 
 
             else
-            StartCoroutine(matchable.Resolve(collectionPoint));
+            StartCoroutine(matchable.Resolve(target));
 
         }
 
         // update the player's score
         // This algorithm Will allow bigger matches to be worth more points
         AddScore(toResolve.Count * toResolve.Count);
+
+        // if there was a powerup, reset the sorting order
+        if (powerup != null)
+        {
+            powerup.SortingOrder = 1;
+        }
 
         yield return null;    
     }

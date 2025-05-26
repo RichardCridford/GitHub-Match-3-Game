@@ -67,10 +67,20 @@ public class Matchable : Movable
         pool.ReturnObjectToPool(this);
 
     }
-
+    // change the sprite of this matchable to be a powerup while retaining colour and type
     public void Upgrade(Sprite powerupSprite)
     {
         spriteRenderer.sprite = powerupSprite;
+    }
+
+    // set the sorting order of the sprite renderer so it will be drawn aboce or below others
+    public int SortingOrder
+    {
+        set 
+        {
+            spriteRenderer.sortingOrder = value;
+        }
+    
     }
 
     // when the player clicks, select this as the first selected
