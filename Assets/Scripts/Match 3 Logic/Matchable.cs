@@ -58,13 +58,14 @@ public class Matchable : Movable
         
         
         // move off the grid to a collection point
-        yield return StartCoroutine (MoveToPosition(collectionPoint.position));
+        yield return StartCoroutine (MoveToTransform(collectionPoint));
 
         // reset
         spriteRenderer.sortingOrder = 1;
 
         // return back to the pool
         pool.ReturnObjectToPool(this);
+
 
     }
     // change the sprite of this matchable to be a powerup while retaining colour and type
