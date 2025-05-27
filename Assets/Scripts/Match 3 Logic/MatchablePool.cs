@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /*
  * This is a pool of matachables which will instantiate during load time. 
@@ -19,6 +20,7 @@ public class MatchablePool : ObjectPool<Matchable>
     [SerializeField] private Color[] colors;
 
     [SerializeField] private Sprite match4Powerup;
+    [SerializeField] private Sprite match5Powerup;
 
     public void RandomizeType(Matchable toRandomize)
     {
@@ -48,10 +50,18 @@ public class MatchablePool : ObjectPool<Matchable>
         return nextType;
     }
 
-    public Matchable UpgradeMatchable(Matchable toBeUpgraded)
+    public Matchable UpgradeMatchable(Matchable toBeUpgraded, int matchType)
     {
-        toBeUpgraded.Upgrade(match4Powerup);
+        if(matchType == 4)
         
+            return toBeUpgraded.Upgrade(match4Powerup);
+
+        if (matchType > 4)
+
+            return toBeUpgraded.Upgrade(match5Powerup);
+
+        Debug.LogWarning("Tried to upgrade a matchable with an invalid match type");
+
         return toBeUpgraded;
     }
     

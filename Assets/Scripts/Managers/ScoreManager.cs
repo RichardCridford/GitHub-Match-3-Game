@@ -65,37 +65,41 @@ public class ScoreManager : Singleton<ScoreManager>
         Matchable matchable;
 
         Transform target = collectionPoint;
-        
+
+        // TODO check for cross match first
+
 
         // if a larger match is made, create a powerup
-        if (toResolve.Count == 4)
+        if (toResolve.Count > 3)
         {
-            powerup = pool.UpgradeMatchable(toResolve.ToBeUpgraded);
+     
+            powerup = pool.UpgradeMatchable(toResolve.ToBeUpgraded, toResolve.Count);
 
             toResolve.RemoveMatchable(powerup);
 
             target = powerup.transform;
 
             powerup.SortingOrder = 3;
-        }
-
-        // iterate through every matchable in a match
-        for(int i = 0; i != toResolve.Count; ++i )
-        {
-            matchable = toResolve.Matchables[i];
-
-            // remove the matchables from the grid 
-            grid.RemoveItemAt(matchable.position);
-
-            // move them off to the side of the screen 
-            // and wait for the last one to finish
-            if (i == toResolve.Count - 1)
-                yield return StartCoroutine(matchable.Resolve(target)); 
-
-            else
-            StartCoroutine(matchable.Resolve(target));
 
         }
+
+            // iterate through every matchable in a match
+            for (int i = 0; i != toResolve.Count; ++i)
+            {
+                matchable = toResolve.Matchables[i];
+
+                // remove the matchables from the grid 
+                grid.RemoveItemAt(matchable.position);
+
+                // move them off to the side of the screen 
+                // and wait for the last one to finish
+                if (i == toResolve.Count - 1)
+                    yield return StartCoroutine(matchable.Resolve(target));
+
+                else
+                    StartCoroutine(matchable.Resolve(target));
+
+            }
 
         // update the player's score
         // This algorithm Will allow bigger matches to be worth more points

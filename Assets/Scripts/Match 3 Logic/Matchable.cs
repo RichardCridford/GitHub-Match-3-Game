@@ -69,9 +69,11 @@ public class Matchable : Movable
 
     }
     // change the sprite of this matchable to be a powerup while retaining colour and type
-    public void Upgrade(Sprite powerupSprite)
+    public Matchable Upgrade(Sprite powerupSprite)
     {
         spriteRenderer.sprite = powerupSprite;
+
+        return this;
     }
 
     // set the sorting order of the sprite renderer so it will be drawn aboce or below others

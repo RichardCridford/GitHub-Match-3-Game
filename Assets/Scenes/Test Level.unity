@@ -675,6 +675,7 @@ MonoBehaviour:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
   match4Powerup: {fileID: 1408217188, guid: 9c1332e4e04dc3d4a8e578db225588cb, type: 3}
+  match5Powerup: {fileID: 2057443357, guid: 9c1332e4e04dc3d4a8e578db225588cb, type: 3}
 --- !u!1 &1231840738
 GameObject:
   m_ObjectHideFlags: 0
