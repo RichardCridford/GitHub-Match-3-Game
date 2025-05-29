@@ -66,22 +66,18 @@ public class ScoreManager : Singleton<ScoreManager>
 
         Transform target = collectionPoint;
 
-        // TODO check for cross match first
-
-
-        // if a larger match is made, create a powerup
+        // if larger match is made, create a powerup
         if (toResolve.Count > 3)
         {
-     
-            powerup = pool.UpgradeMatchable(toResolve.ToBeUpgraded, toResolve.Count);
+            powerup = pool.UpgradeMatchable(toResolve.ToBeUpgraded, toResolve.Type);
 
             toResolve.RemoveMatchable(powerup);
 
             target = powerup.transform;
 
             powerup.SortingOrder = 3;
-
         }
+
 
             // iterate through every matchable in a match
             for (int i = 0; i != toResolve.Count; ++i)

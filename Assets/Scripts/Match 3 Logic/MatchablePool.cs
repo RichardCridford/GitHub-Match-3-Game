@@ -21,6 +21,7 @@ public class MatchablePool : ObjectPool<Matchable>
 
     [SerializeField] private Sprite match4Powerup;
     [SerializeField] private Sprite match5Powerup;
+    [SerializeField] private Sprite crossPowerup;
 
     public void RandomizeType(Matchable toRandomize)
     {
@@ -50,13 +51,17 @@ public class MatchablePool : ObjectPool<Matchable>
         return nextType;
     }
 
-    public Matchable UpgradeMatchable(Matchable toBeUpgraded, int matchType)
+    public Matchable UpgradeMatchable(Matchable toBeUpgraded, MatchType type)
     {
-        if(matchType == 4)
+        if(type == MatchType.cross)
+            return toBeUpgraded.Upgrade(crossPowerup);
+
+
+        if (type == MatchType.match4)
         
             return toBeUpgraded.Upgrade(match4Powerup);
 
-        if (matchType > 4)
+        if (type == MatchType.match5)
 
             return toBeUpgraded.Upgrade(match5Powerup);
 

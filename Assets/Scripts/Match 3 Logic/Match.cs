@@ -11,6 +11,16 @@ public enum Orientation
 
 }
 
+public enum MatchType
+{ 
+    invalid,
+    match3,
+    match4,
+    match5,
+    cross
+
+}
+
 /*
  * This is a collection of Matchables that have been matched.
  */
@@ -68,6 +78,29 @@ public class Match
         toBeUpgraded = original; 
     }
 
+    // get the type of the match
+    public MatchType Type
+    {
+        get 
+        {
+            if (orientation == Orientation.both)
+                return MatchType.cross;
+
+            else if (matchables.Count > 4)
+
+                return MatchType.match5;
+
+            else if (matchables.Count == 4)
+                return MatchType.match4;
+
+            else if (matchables.Count == 3)
+                return MatchType.match3;
+
+            else
+                return MatchType.invalid;
+        }
+    }
+
     // get the matchable to be upgraded
     public Matchable ToBeUpgraded
     {
@@ -103,6 +136,8 @@ public class Match
     public void Merge(Match toMerge)
     {
         matchables.AddRange(toMerge.Matchables);
+
+        // update the match orientation
     
     }
 
