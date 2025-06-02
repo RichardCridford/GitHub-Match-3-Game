@@ -658,7 +658,7 @@ MonoBehaviour:
   howManyTypes: 8
   sprites:
   - {fileID: -774062931, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
-  - {fileID: 1993481951, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
+  - {fileID: 21300000, guid: ea83bc6a26e797b458a176f956fc40a3, type: 3}
   - {fileID: 21300000, guid: 0cd85aec4bc97bb4380ceccae3f2b4fd, type: 3}
   - {fileID: -51481947, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
   - {fileID: -875861946, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
@@ -667,7 +667,7 @@ MonoBehaviour:
   - {fileID: -260280395, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
   colors:
   - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0.9811321, g: 0.6787598, b: 0.19900322, a: 1}
   - {r: 0.28430647, g: 0.5660378, b: 0.23762906, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
