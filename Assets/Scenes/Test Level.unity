@@ -659,23 +659,24 @@ MonoBehaviour:
   sprites:
   - {fileID: -774062931, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
   - {fileID: 1993481951, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
-  - {fileID: 5925443, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
+  - {fileID: 21300000, guid: 0cd85aec4bc97bb4380ceccae3f2b4fd, type: 3}
   - {fileID: -51481947, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
   - {fileID: -875861946, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
   - {fileID: 1006324183, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
-  - {fileID: 2103596306, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
+  - {fileID: 21300000, guid: 5c3e028b65fedf341aa2c7c391c01fb2, type: 3}
   - {fileID: -260280395, guid: 778c8c934450fdf43ba7190dc7a46695, type: 3}
   colors:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0.28430647, g: 0.5660378, b: 0.23762906, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0.9622642, g: 0.66723037, b: 0.87601364, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
   match4Powerup: {fileID: 1408217188, guid: 9c1332e4e04dc3d4a8e578db225588cb, type: 3}
   match5Powerup: {fileID: 2057443357, guid: 9c1332e4e04dc3d4a8e578db225588cb, type: 3}
+  crossPowerup: {fileID: 1723911398, guid: 9c1332e4e04dc3d4a8e578db225588cb, type: 3}
 --- !u!1 &1231840738
 GameObject:
   m_ObjectHideFlags: 0
