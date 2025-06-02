@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using UnityEngine;
 
 public enum Orientation
@@ -138,7 +139,24 @@ public class Match
         matchables.AddRange(toMerge.Matchables);
 
         // update the match orientation
-    
+
+        if
+        (
+                orientation == Orientation.both
+            || toMerge.orientation == Orientation.both
+            || (orientation == Orientation.horizontal && toMerge.orientation == Orientation.vertical)
+            || (orientation == Orientation.vertical && toMerge.orientation == Orientation.horizontal)
+        )
+
+            orientation = Orientation.both;
+
+        else if (toMerge.orientation == Orientation.horizontal)
+            orientation = Orientation.horizontal;
+
+        else if (toMerge.orientation == Orientation.vertical)
+            orientation = Orientation.vertical;
+
+
     }
 
     public override string ToString()
