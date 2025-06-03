@@ -59,7 +59,7 @@ public class ScoreManager : Singleton<ScoreManager>
     }
 
     // coroutine for resolving a match
-    public IEnumerator ResolveMatch(Match toResolve)
+    public IEnumerator ResolveMatch(Match toResolve, bool isResultOfPowerup = false)
     {
         Matchable powerup = null;
         Matchable matchable;
@@ -67,7 +67,7 @@ public class ScoreManager : Singleton<ScoreManager>
         Transform target = collectionPoint;
 
         // if larger match is made, create a powerup
-        if (toResolve.Count > 3)
+        if (!isResultOfPowerup && toResolve.Count > 3)
         {
             powerup = pool.UpgradeMatchable(toResolve.ToBeUpgraded, toResolve.Type);
 

@@ -383,5 +383,19 @@ public class MatchableGrid : GridSystem<Matchable>
         return madeAMatch;
 
     }
+
+    // make a match of all matchables adjacent to this powerup on the grid and resolve
+    public void MatchAllAdjacent(Matchable powerup)
+    {
+        Match allAdjacent = new Match();
+
+        for (int y = powerup.position.y - 1; y != powerup.position.y + 2; ++y)
+            for (int x = powerup.position.x - 1; x != powerup.position.x + 2; ++x)
+                if (CheckBounds(x, y) && !IsEmpty(x, y) && GetItemAt(x, y).Idle)
+                     allAdjacent.AddMatchable(GetItemAt(x, y));
+                
+
+       StartCoroutine (score.ResolveMatch(allAdjacent, true));
+    }
 }
 

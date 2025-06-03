@@ -17,9 +17,12 @@ using UnityEngine;
 public class Matchable : Movable
 {
     private MatchablePool pool;
+    private MatchableGrid grid;
     private Cursor cursor;
     
     private int type;
+
+    private MatchType powerup = MatchType.invalid;
 
     public int Type
     {
@@ -39,6 +42,7 @@ public class Matchable : Movable
     {
         cursor = Cursor.Instance;
         pool = (MatchablePool)MatchablePool.Instance;
+        grid = (MatchableGrid)MatchableGrid.Instance;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -53,6 +57,25 @@ public class Matchable : Movable
 
     public IEnumerator Resolve(Transform collectionPoint)
     {
+        // if matchable is a powerup resolve it in that way
+        if (powerup != MatchType.invalid)
+        {
+            // resolve a match4 powerup
+            if (powerup == MatchType.match4)
+            {
+                // score everything adjacent to this
+                grid.MatchAllAdjacent(this);
+            }
+
+            // resolve a match5 powerup
+
+            // resolve a cross powerup
+
+            powerup = MatchType.invalid;
+
+        }
+
+
         // draw above others in the grid
         spriteRenderer.sortingOrder = 2;
         
@@ -69,8 +92,9 @@ public class Matchable : Movable
 
     }
     // change the sprite of this matchable to be a powerup while retaining colour and type
-    public Matchable Upgrade(Sprite powerupSprite)
+    public Matchable Upgrade(MatchType powerupType , Sprite powerupSprite)
     {
+        powerup = powerupType;
         spriteRenderer.sprite = powerupSprite;
 
         return this;
