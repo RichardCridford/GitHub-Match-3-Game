@@ -84,6 +84,13 @@ public class ScoreManager : Singleton<ScoreManager>
             {
                 matchable = toResolve.Matchables[i];
 
+                // check if this is a match5 powerup, if it is don't remove or resolve it
+                // it can stay on the grid until the player decides to use it
+                if (matchable.isGem)
+                    continue;
+            
+
+
                 // remove the matchables from the grid 
                 grid.RemoveItemAt(matchable.position);
 

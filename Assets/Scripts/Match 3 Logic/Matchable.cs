@@ -22,8 +22,6 @@ public class Matchable : Movable
     
     private int type;
 
-    private MatchType powerup = MatchType.invalid;
-
     public int Type
     {
         get
@@ -31,6 +29,19 @@ public class Matchable : Movable
             return type;
         }
     }
+
+    private MatchType powerup = MatchType.invalid;
+
+    public bool isGem
+    {
+        get
+        {
+            return powerup == MatchType.match5;
+        
+        } 
+    }
+
+
 
     private SpriteRenderer spriteRenderer;
 
@@ -67,8 +78,6 @@ public class Matchable : Movable
                 grid.MatchAllAdjacent(this);
             }
 
-            // resolve a match5 powerup
-
             // resolve a cross powerup
             if (powerup == MatchType.cross)
             {
@@ -99,6 +108,14 @@ public class Matchable : Movable
     // change the sprite of this matchable to be a powerup while retaining colour and type
     public Matchable Upgrade(MatchType powerupType , Sprite powerupSprite)
     {
+        if (powerupType == MatchType.match5)
+        {
+            // this powerup is it's own type and can be used with any colour matchable
+            type = -1;
+            // set sprite to default colour
+            spriteRenderer.color = Color.white;
+        }
+        
         powerup = powerupType;
         spriteRenderer.sprite = powerupSprite;
 
