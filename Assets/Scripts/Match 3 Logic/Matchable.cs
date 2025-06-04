@@ -70,6 +70,11 @@ public class Matchable : Movable
             // resolve a match5 powerup
 
             // resolve a cross powerup
+            if (powerup == MatchType.cross)
+            {
+                grid.MatchRowAndColumn(this);
+            
+            }
 
             powerup = MatchType.invalid;
 

@@ -397,5 +397,24 @@ public class MatchableGrid : GridSystem<Matchable>
 
        StartCoroutine (score.ResolveMatch(allAdjacent, true));
     }
+
+    // make a match of everything in the row and column that contains the powerup and resolve it
+    public void MatchRowAndColumn(Matchable powerup)
+    {
+        Match rowAndColumn = new Match();
+
+        for (int y = 0; y != Dimensions.y; ++y)
+            if (CheckBounds(powerup.position.x, y) && !IsEmpty(powerup.position.x, y) && GetItemAt(powerup.position.x, y).Idle)
+                rowAndColumn.AddMatchable(GetItemAt(powerup.position.x, y));
+
+        for (int x = 0; x != Dimensions.x; ++x)
+            if (CheckBounds(x, powerup.position.y) && !IsEmpty(x, powerup.position.y) && GetItemAt(x, powerup.position.y).Idle)
+                rowAndColumn.AddMatchable(GetItemAt(x, powerup.position.y));
+
+
+        StartCoroutine(score.ResolveMatch(rowAndColumn, true));
+    }
+
 }
+
 
