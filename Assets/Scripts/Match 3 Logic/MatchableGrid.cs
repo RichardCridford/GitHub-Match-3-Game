@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
 using UnityEditor.Build;
 using UnityEngine;
@@ -144,7 +145,7 @@ public class MatchableGrid : GridSystem<Matchable>
     }
 
 
-
+    // attempt to swap two matchables on the gird, see if they made a valid match, resove any matches, if no matches swap them back
     public IEnumerator TrySwap(Matchable[] toBeSwapped)       
     {
         // Make a local copy of what we're swapping so cursor doesn't overwrite
@@ -154,6 +155,27 @@ public class MatchableGrid : GridSystem<Matchable>
 
         // yield until matchables animate swapping
         yield return StartCoroutine(Swap(copies));
+
+        // special case for gems 
+        // is both are gems match everything on the grid
+        if (copies[0].isGem && copies[1].isGem)
+        {
+            MatchEverything();
+            yield break;
+        }
+
+        // if 1 is a gem, then match all matching the colour of the other matchable
+
+        else if (copies[0].isGem)
+        {
+            MatchEverythingByType(copies[0], copies[1].Type);
+            yield break;
+        }
+        else if (copies[1].isGem)
+        {
+            MatchEverythingByType(copies[1], copies[0].Type);
+            yield break;
+        }
 
         // check for a valid match
         Match[] matches = new Match[2];
@@ -186,6 +208,7 @@ public class MatchableGrid : GridSystem<Matchable>
          
     }
 
+    // collapse and repopulate the grid, then scan for matches and if there's a match, do it again
     private IEnumerator FillAndScanGrid()
     {
         CollapseGrid();
@@ -351,7 +374,7 @@ public class MatchableGrid : GridSystem<Matchable>
     
     }
 
-    // scane the grid for any matches and resolve them 
+    // scan the grid for any matches and resolve them 
     private bool ScanForMatches()
     {
         bool madeAMatch = false;
@@ -395,7 +418,7 @@ public class MatchableGrid : GridSystem<Matchable>
                      allAdjacent.AddMatchable(GetItemAt(x, y));
                 
 
-       StartCoroutine (score.ResolveMatch(allAdjacent, true));
+       StartCoroutine (score.ResolveMatch(allAdjacent, MatchType.match4));
     }
 
     // make a match of everything in the row and column that contains the powerup and resolve it
@@ -412,7 +435,37 @@ public class MatchableGrid : GridSystem<Matchable>
                 rowAndColumn.AddMatchable(GetItemAt(x, powerup.position.y));
 
 
-        StartCoroutine(score.ResolveMatch(rowAndColumn, true));
+        StartCoroutine(score.ResolveMatch(rowAndColumn, MatchType.cross));
+    }
+    
+    // match everything on the grid with a specific type and resolve it
+    public void MatchEverythingByType(Matchable gem, int type)
+    {
+        Match everythingByType = new Match(gem);
+
+        for (int y = 0; y != Dimensions.y; ++y)
+            for (int x = 0; x != Dimensions.x; ++x)
+                if (CheckBounds(x, y) && !IsEmpty(x, y) && GetItemAt(x, y).Idle && GetItemAt(x , y).Type == type)
+                    everythingByType.AddMatchable(GetItemAt(x, y));
+
+        StartCoroutine(score.ResolveMatch(everythingByType, MatchType.match5));
+        StartCoroutine(FillAndScanGrid());
+    }
+
+    // match everything on the grid and resolve it
+    public void MatchEverything()
+    {
+        Match everything = new Match();
+
+        for (int y = 0; y != Dimensions.y; ++y)
+            for (int x = 0; x != Dimensions.x; ++x)
+                if (CheckBounds(x, y) && !IsEmpty(x, y) && GetItemAt(x, y).Idle)
+                    everything.AddMatchable(GetItemAt(x, y));
+
+        StartCoroutine(score.ResolveMatch(everything, MatchType.match5));
+        StartCoroutine(FillAndScanGrid());
+
+
     }
 
 }

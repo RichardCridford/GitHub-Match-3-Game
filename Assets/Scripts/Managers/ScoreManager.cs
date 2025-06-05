@@ -59,23 +59,23 @@ public class ScoreManager : Singleton<ScoreManager>
     }
 
     // coroutine for resolving a match
-    public IEnumerator ResolveMatch(Match toResolve, bool isResultOfPowerup = false)
+    public IEnumerator ResolveMatch(Match toResolve, MatchType powerupUsed = MatchType.invalid)
     {
-        Matchable powerup = null;
+        Matchable powerupFormed = null;
         Matchable matchable;
 
         Transform target = collectionPoint;
 
-        // if larger match is made, create a powerup
-        if (!isResultOfPowerup && toResolve.Count > 3)
+        // if no powerup was used to trigger this match and a larger match is made, create a powerup
+        if (powerupUsed == MatchType.invalid && toResolve.Count > 3)
         {
-            powerup = pool.UpgradeMatchable(toResolve.ToBeUpgraded, toResolve.Type);
+            powerupFormed = pool.UpgradeMatchable(toResolve.ToBeUpgraded, toResolve.Type);
 
-            toResolve.RemoveMatchable(powerup);
+            toResolve.RemoveMatchable(powerupFormed);
 
-            target = powerup.transform;
+            target = powerupFormed.transform;
 
-            powerup.SortingOrder = 3;
+            powerupFormed.SortingOrder = 3;
         }
 
 
@@ -84,9 +84,9 @@ public class ScoreManager : Singleton<ScoreManager>
             {
                 matchable = toResolve.Matchables[i];
 
-                // check if this is a match5 powerup, if it is don't remove or resolve it
+                // only allow games used as powerups to resolve gems
                 // it can stay on the grid until the player decides to use it
-                if (matchable.isGem)
+                if (powerupUsed != MatchType.match5 && matchable.isGem)
                     continue;
             
 
@@ -109,9 +109,9 @@ public class ScoreManager : Singleton<ScoreManager>
         AddScore(toResolve.Count * toResolve.Count);
 
         // if there was a powerup, reset the sorting order
-        if (powerup != null)
+        if (powerupFormed != null)
         {
-            powerup.SortingOrder = 1;
+            powerupFormed.SortingOrder = 1;
         }
 
         yield return null;    
