@@ -89,6 +89,9 @@ public class Matchable : Movable
 
         }
 
+        // if tis was called as the result of a powerup being upgraded, then don't move it off the grid
+        if (collectionPoint == null)
+            yield break;
 
         // draw above others in the grid
         spriteRenderer.sortingOrder = 2;
@@ -108,6 +111,14 @@ public class Matchable : Movable
     // change the sprite of this matchable to be a powerup while retaining colour and type
     public Matchable Upgrade(MatchType powerupType , Sprite powerupSprite)
     {
+
+        // if this is already a powerup, resolve it before upgrading
+        if (powerup != MatchType.invalid)
+        {
+            idle = false;
+            StartCoroutine(Resolve(null));
+            idle = true;
+        }
         if (powerupType == MatchType.match5)
         {
             // this powerup is it's own type and can be used with any colour matchable

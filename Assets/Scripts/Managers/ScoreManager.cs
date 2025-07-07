@@ -23,13 +23,17 @@ public class ScoreManager : Singleton<ScoreManager>
 
     [SerializeField]
     private Transform collectionPoint;
-    
-    // UI element for displaying the score
-    private Text scoreText;
 
-    // actual score, with getter 
-    private int score;
+    // UI element for displaying the score and combo multiplier
+    [SerializeField]
+    private Text scoreText,
+                 comboText;
 
+    // actual score, and a combo multiplier
+    private int score, 
+                comboMultiplier;
+
+    //getter for score
     public int Score
     {
         get 
@@ -39,11 +43,6 @@ public class ScoreManager : Singleton<ScoreManager>
     
     }
 
-    // get references during Awake
-    protected override void Init()
-    {
-        scoreText = GetComponent<Text>();
-    }
 
     private void Start()
     {

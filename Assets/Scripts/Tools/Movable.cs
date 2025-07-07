@@ -21,7 +21,7 @@ public class Movable : MonoBehaviour
 
     private float howfar;
 
-    private bool idle = true;
+    protected bool idle = true;
 
     public bool Idle
     {
