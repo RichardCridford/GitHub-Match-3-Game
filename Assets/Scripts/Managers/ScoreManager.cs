@@ -49,10 +49,11 @@ public class ScoreManager : Singleton<ScoreManager>
 
     // how much time since the player last scored?
     private float timeSinceLastScore;
-    
+
     // how much time should we allow before resetting the combo multiplier? 
     [SerializeField]
-    private float maxComboTime;
+    private float   maxComboTime,
+                    currentComboTime;
 
     // is the combo timer currently running?
     private bool timerIsActive;
@@ -89,10 +90,10 @@ public class ScoreManager : Singleton<ScoreManager>
         do
         {
             timeSinceLastScore += Time.deltaTime;
-            comboSlider.value = 1 - timeSinceLastScore / maxComboTime ;
+            comboSlider.value = 1 - timeSinceLastScore / currentComboTime ;
             yield return null;
         }
-        while (timeSinceLastScore < maxComboTime);
+        while (timeSinceLastScore < currentComboTime);
 
         comboMultiplier = 0;
         comboText.enabled = false;
@@ -105,6 +106,10 @@ public class ScoreManager : Singleton<ScoreManager>
     private int IncreaseCombo()
     {
         comboText.text = "Combo X" + ++comboMultiplier;
+
+        // the piece of math to help with the combo multiplier getting quicker each time.
+        currentComboTime = maxComboTime - Mathf.Log(comboMultiplier) / 2;
+        
         return comboMultiplier;
     
     }
