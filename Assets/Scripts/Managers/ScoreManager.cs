@@ -29,6 +29,10 @@ public class ScoreManager : Singleton<ScoreManager>
     private Text scoreText,
                  comboText;
 
+    // UI slider for displaying the time reamining in the combo
+    [SerializeField]
+    private Slider comboSlider;
+
     // actual score, and a combo multiplier
     private int score, 
                 comboMultiplier;
@@ -80,6 +84,7 @@ public class ScoreManager : Singleton<ScoreManager>
         do
         {
             timeSinceLastScore += Time.deltaTime;
+            comboSlider.value = 1 - timeSinceLastScore / maxComboTime ;
             yield return null;
         }
         while (timeSinceLastScore < maxComboTime);
