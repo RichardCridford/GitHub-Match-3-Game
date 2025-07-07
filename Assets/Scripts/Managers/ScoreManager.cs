@@ -62,6 +62,9 @@ public class ScoreManager : Singleton<ScoreManager>
     {
         pool = (MatchablePool) MatchablePool.Instance;
         grid = (MatchableGrid) MatchableGrid.Instance;
+
+        comboText.enabled = false;
+        comboSlider.gameObject.SetActive(false);
     }
 
     // add an amount to the score and update the UI Text
@@ -80,6 +83,8 @@ public class ScoreManager : Singleton<ScoreManager>
     private IEnumerator ComboTimer()
     {
         timerIsActive = true;
+        comboText.enabled = true;
+        comboSlider.gameObject.SetActive(true);
 
         do
         {
@@ -90,8 +95,11 @@ public class ScoreManager : Singleton<ScoreManager>
         while (timeSinceLastScore < maxComboTime);
 
         comboMultiplier = 0;
+        comboText.enabled = false;
+        comboSlider.gameObject.SetActive(false);
+
         timerIsActive = false;
-    
+
     }
 
     private int IncreaseCombo()
