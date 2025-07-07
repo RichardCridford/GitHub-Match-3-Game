@@ -43,6 +43,16 @@ public class ScoreManager : Singleton<ScoreManager>
     
     }
 
+    // how much time since the player last scored?
+    private float timeSinceLastScore;
+    
+    // how much time should we allow before resetting the combo multiplier? 
+    [SerializeField]
+    private float maxComboTime;
+
+    // is the combo timer currently running?
+    private bool timerIsActive;
+
 
     private void Start()
     {
@@ -53,8 +63,37 @@ public class ScoreManager : Singleton<ScoreManager>
     // add an amount to the score and update the UI Text
     public void AddScore(int amount)
     {
-        score += amount;
+        score += amount * IncreaseCombo();
         scoreText.text = "Score : " + score;
+
+        timeSinceLastScore = 0;
+
+        if (!timerIsActive)
+            StartCoroutine(ComboTimer());
+    }
+
+    // Combo timer coroutine, counts up to max combo time before resetting the combo multiplier
+    private IEnumerator ComboTimer()
+    {
+        timerIsActive = true;
+
+        do
+        {
+            timeSinceLastScore += Time.deltaTime;
+            yield return null;
+        }
+        while (timeSinceLastScore < maxComboTime);
+
+        comboMultiplier = 0;
+        timerIsActive = false;
+    
+    }
+
+    private int IncreaseCombo()
+    {
+        comboText.text = "Combo X" + ++comboMultiplier;
+        return comboMultiplier;
+    
     }
 
     // coroutine for resolving a match
