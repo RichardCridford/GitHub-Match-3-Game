@@ -20,6 +20,10 @@ public class MatchableGrid : GridSystem<Matchable>
     // A distance offscreen where the matchables will spawn
     [SerializeField] private Vector3 offscreenOffset;
 
+    // A list of possible moves
+    [SerializeField]
+    private List<Matchable> possibleMoves;
+
     // Get a reference to the pool on start
     private void Start()
     {
@@ -466,6 +470,26 @@ public class MatchableGrid : GridSystem<Matchable>
         StartCoroutine(FillAndScanGrid());
 
 
+    }
+
+    // scan for all possible moves
+    private int ScanForMoves()
+    {
+        possibleMoves = new List<Matchable>();
+
+        // scan through the entire grid
+        // if a matchable can move, add it to the list of possible moves
+        for (int y = 0; y != Dimensions.y; ++y)
+            for (int x = 0; x != Dimensions.x; ++x)
+                if (CheckBounds(x, y) && !IsEmpty(x, y) && CanMove(GetItemAt(x, y)))
+                    possibleMoves.Add(GetItemAt(x, y));
+
+                    return possibleMoves.Count;
+    }
+
+    private bool CanMove(Matchable toCheck)
+    {
+        return false;
     }
 
 }
