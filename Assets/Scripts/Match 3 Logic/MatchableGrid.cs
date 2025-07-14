@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using Unity.VisualScripting;
 using UnityEditor.Build;
 using UnityEngine;
 
@@ -487,8 +488,47 @@ public class MatchableGrid : GridSystem<Matchable>
                     return possibleMoves.Count;
     }
 
+    // check if this matchable can move to form a valid match
     private bool CanMove(Matchable toCheck)
     {
+        if 
+        (
+                CanMove(toCheck, Vector2Int.up) 
+            ||  CanMove(toCheck, Vector2Int.right) 
+            ||  CanMove(toCheck, Vector2Int.down) 
+            ||  CanMove(toCheck, Vector2Int.left)
+        )
+            return true;
+        
+        return false;
+    }
+    // can this matchable move in 1 direction?
+    private bool CanMove(Matchable toCheck, Vector2Int direction)
+    {
+        // look 2 and 3 positions away straight ahead
+        Vector2Int position1 = toCheck.position + direction * 2,
+                   position2 = toCheck.position + direction * 3;
+
+        if (IsAPotentialMatch(toCheck, position1, position2))
+            return true;
+        
+        
+        return false;
+    }
+    // will these matchables form a potential match?
+    private bool IsAPotentialMatch(Matchable toCompare, Vector2Int position1, Vector2Int position2)
+    {
+        if
+        (
+                CheckBounds(position1)                       && CheckBounds(position2) 
+            &&  !IsEmpty(position1)                          && !IsEmpty(position2) 
+            &&  GetItemAt(position1).Idle                    && GetItemAt(position2).Idle 
+            &&  GetItemAt(position1).Type == toCompare.Type  && GetItemAt(position2).Type == toCompare.Type 
+
+
+        )
+            return true;
+        
         return false;
     }
 
