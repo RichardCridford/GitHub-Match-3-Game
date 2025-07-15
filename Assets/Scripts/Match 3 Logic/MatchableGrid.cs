@@ -15,7 +15,6 @@ public class MatchableGrid : GridSystem<Matchable>
 {
     // The pool of Matchables with which to populate the grid
     private MatchablePool pool;
-
     private ScoreManager score;
 
     // A distance offscreen where the matchables will spawn
@@ -29,7 +28,6 @@ public class MatchableGrid : GridSystem<Matchable>
     private void Start()
     {
         pool = (MatchablePool) MatchablePool.Instance;
-
         score = ScoreManager.Instance;
     }
 
@@ -213,18 +211,7 @@ public class MatchableGrid : GridSystem<Matchable>
          
     }
 
-    // collapse and repopulate the grid, then scan for matches and if there's a match, do it again
-    private IEnumerator FillAndScanGrid()
-    {
-        CollapseGrid();
-        yield return StartCoroutine(PopulateGrid(true));
-
-        // scan the grid for chain reactions
-        if (ScanForMatches())
-            // rescursive routine  
-            StartCoroutine(FillAndScanGrid());
-
-    }
+  
 
     // coroutine that swaps 2 matchables in the grid
     private IEnumerator Swap(Matchable[] toBeSwapped)
@@ -344,26 +331,7 @@ public class MatchableGrid : GridSystem<Matchable>
         return match;
     }
 
-    private void CollapseGrid()
-    {
-        /* go through each column left ot right,
-         * search from bottom up to find an empty space,
-         * then look above the empty space, and up through the rest of the column,
-         * until you find a non empty space.
-         * Move the matchable at the non empty space into the empty space,
-         * then continue looking for emty spaces
-         * */ 
-        for (int x = 0; x != Dimensions.x; ++x)
-            for (int yEmpty = 0; yEmpty != Dimensions.y - 1; ++yEmpty)
-                if (IsEmpty(x, yEmpty))
-                    for (int yNotEmpty = yEmpty + 1; yNotEmpty != Dimensions.y; ++yNotEmpty)
-                        if (!IsEmpty(x, yNotEmpty) && GetItemAt(x, yNotEmpty).Idle)
-                        {
-                            MoveMatchableToPosition(GetItemAt(x, yNotEmpty), x, yEmpty);
-                            break;
-                        
-                        }
-    }
+    
 
     private void MoveMatchableToPosition(Matchable toMove, int x, int y)
     {
@@ -473,6 +441,46 @@ public class MatchableGrid : GridSystem<Matchable>
 
     }
 
+    // collapse and repopulate the grid, then scan for matches and if there's a match, do it again
+    private IEnumerator FillAndScanGrid()
+    {
+        // collapse and repopulate grid
+        CollapseGrid();
+        yield return StartCoroutine(PopulateGrid(true));
+
+        // scan the grid for chain reactions
+        if (ScanForMatches())
+            // rescursive routine  
+            StartCoroutine(FillAndScanGrid());
+
+        else
+        {
+            ScanForMoves();
+        }
+
+    }
+
+    private void CollapseGrid()
+    {
+        /* go through each column left ot right,
+         * search from bottom up to find an empty space,
+         * then look above the empty space, and up through the rest of the column,
+         * until you find a non empty space.
+         * Move the matchable at the non empty space into the empty space,
+         * then continue looking for emty spaces
+         * */
+        for (int x = 0; x != Dimensions.x; ++x)
+            for (int yEmpty = 0; yEmpty != Dimensions.y - 1; ++yEmpty)
+                if (IsEmpty(x, yEmpty))
+                    for (int yNotEmpty = yEmpty + 1; yNotEmpty != Dimensions.y; ++yNotEmpty)
+                        if (!IsEmpty(x, yNotEmpty) && GetItemAt(x, yNotEmpty).Idle)
+                        {
+                            MoveMatchableToPosition(GetItemAt(x, yNotEmpty), x, yEmpty);
+                            break;
+
+                        }
+    }
+
     // scan for all possible moves
     private int ScanForMoves()
     {
@@ -499,6 +507,9 @@ public class MatchableGrid : GridSystem<Matchable>
             ||  CanMove(toCheck, Vector2Int.left)
         )
             return true;
+
+        if(toCheck.isGem)
+            return true;
         
         return false;
     }
@@ -507,12 +518,41 @@ public class MatchableGrid : GridSystem<Matchable>
     {
         // look 2 and 3 positions away straight ahead
         Vector2Int position1 = toCheck.position + direction * 2,
-                   position2 = toCheck.position + direction * 3;
+                   position2 = toCheck.position + direction * 2;
+
+        if (IsAPotentialMatch(toCheck, position1, position2))
+            return true;
+
+        
+        // what is the clockwise direction?
+        Vector2Int cw = new Vector2Int(direction.y, -direction.x),
+                  ccw = new Vector2Int(-direction.y, direction.x);
+
+        
+        // look diagonally clockwise
+        position1 = toCheck.position + direction + cw;
+        position2 = toCheck.position + direction + cw * 2;
+
+        if (IsAPotentialMatch(toCheck, position1, position2))
+            return true;
+
+        
+        
+        
+        // look at both diagonals
+       position2 = toCheck.position + direction * ccw;
+
+        if (IsAPotentialMatch(toCheck, position1, position2))
+            return true;
+
+        // look diagonally counterclockwise
+        position1 = toCheck.position + direction + ccw * 2;
 
         if (IsAPotentialMatch(toCheck, position1, position2))
             return true;
         
-        
+
+
         return false;
     }
     // will these matchables form a potential match?

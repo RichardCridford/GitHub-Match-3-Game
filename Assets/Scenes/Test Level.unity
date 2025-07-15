@@ -638,6 +638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offscreenOffset: {x: 0, y: 9, z: 0}
+  possibleMoves: []
 --- !u!4 &676600915
 Transform:
   m_ObjectHideFlags: 0
@@ -981,19 +982,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 6567417202729602108, guid: db0c7ea964022424d9a89357024e662b, type: 3}
-  howManyTypes: 5
+  howManyTypes: 7
   sprites:
   - {fileID: 21300000, guid: 389fd152089b48248ac7d7b40777a4b8, type: 3}
   - {fileID: 21300000, guid: ea83bc6a26e797b458a176f956fc40a3, type: 3}
   - {fileID: 21300000, guid: 0cd85aec4bc97bb4380ceccae3f2b4fd, type: 3}
   - {fileID: 21300000, guid: 344c0228af1f70343916857b047800f1, type: 3}
   - {fileID: 21300000, guid: 5c3e028b65fedf341aa2c7c391c01fb2, type: 3}
+  - {fileID: 523738469, guid: 9c1332e4e04dc3d4a8e578db225588cb, type: 3}
+  - {fileID: 426530159, guid: 9c1332e4e04dc3d4a8e578db225588cb, type: 3}
   colors:
   - {r: 0.07075471, g: 0.4392759, b: 1, a: 1}
   - {r: 0.9811321, g: 0.6787598, b: 0.19900322, a: 1}
   - {r: 0.28430647, g: 0.5660378, b: 0.23762906, a: 1}
   - {r: 0.67058825, g: 0.62352943, b: 0.62352943, a: 1}
   - {r: 0.9607843, g: 0.6666667, b: 0.8745098, a: 1}
+  - {r: 1, g: 0, b: 0.70666647, a: 1}
+  - {r: 0, g: 1, b: 0.06818819, a: 1}
   match4Powerup: {fileID: 1408217188, guid: 9c1332e4e04dc3d4a8e578db225588cb, type: 3}
   match5Powerup: {fileID: 1967760572, guid: 9c1332e4e04dc3d4a8e578db225588cb, type: 3}
   crossPowerup: {fileID: 1723911398, guid: 9c1332e4e04dc3d4a8e578db225588cb, type: 3}
@@ -1420,6 +1425,7 @@ MonoBehaviour:
   comboText: {fileID: 151629143}
   comboSlider: {fileID: 1209384359}
   maxComboTime: 5
+  currentComboTime: 0
 --- !u!114 &1961584085
 MonoBehaviour:
   m_ObjectHideFlags: 0
