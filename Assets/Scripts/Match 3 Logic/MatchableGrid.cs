@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEditor.Build;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /*
  * This class will manage the grid of matchables by inheriting grid mechanics from Grid System
@@ -487,13 +488,15 @@ public class MatchableGrid : GridSystem<Matchable>
         possibleMoves = new List<Matchable>();
 
         // scan through the entire grid
-        // if a matchable can move, add it to the list of possible moves
+        
         for (int y = 0; y != Dimensions.y; ++y)
             for (int x = 0; x != Dimensions.x; ++x)
                 if (CheckBounds(x, y) && !IsEmpty(x, y) && CanMove(GetItemAt(x, y)))
                     possibleMoves.Add(GetItemAt(x, y));
 
-                    return possibleMoves.Count;
+
+        // if a matchable can move, add it to the list of possible moves
+        return possibleMoves.Count;
     }
 
     // check if this matchable can move to form a valid match
@@ -508,21 +511,44 @@ public class MatchableGrid : GridSystem<Matchable>
         )
             return true;
 
-        if(toCheck.isGem)
-            return true;
+            if(toCheck.isGem)
+                return true;
         
         return false;
     }
     // can this matchable move in 1 direction?
     private bool CanMove(Matchable toCheck, Vector2Int direction)
     {
-        // look 2 and 3 positions away straight ahead
-        Vector2Int position1 = toCheck.position + direction * 2,
-                   position2 = toCheck.position + direction * 2;
+        // look 2 and 3 positions away straight ahead <- NOT checking straight ahead, checking left instead
+        Vector2Int  position1 = toCheck.position + direction * 2,
+                    position2 = toCheck.position + direction * 3;
+
+        
+        if (IsAPotentialMatch(toCheck, position1, position2))
+            return true;
+
+        // What is the clockwise direction ?
+        Vector2Int cw = new Vector2Int(direction.y, -direction.x);
+        Vector2Int ccw = new Vector2Int(-direction.y, direction.x);
+
+        // look diagonally clockwise <- this is checking to the right
+        position1 = toCheck.position + direction + cw;
+        position2 = toCheck.position + direction + cw * 2;
 
         if (IsAPotentialMatch(toCheck, position1, position2))
             return true;
 
+        // look diagonally counterclockwise <= this is checking up and down
+        position1 = toCheck.position + direction + ccw;
+        position2 = toCheck.position + direction + ccw * 2;
+
+        if (IsAPotentialMatch(toCheck, position1, position2))
+            return true;
+
+
+        return false;
+
+        /* WORKING ON THIS FOR TESTING
         
         // what is the clockwise direction?
         Vector2Int cw = new Vector2Int(direction.y, -direction.x),
@@ -550,10 +576,10 @@ public class MatchableGrid : GridSystem<Matchable>
 
         if (IsAPotentialMatch(toCheck, position1, position2))
             return true;
-        
+        */
 
 
-        return false;
+
     }
     // will these matchables form a potential match?
     private bool IsAPotentialMatch(Matchable toCompare, Vector2Int position1, Vector2Int position2)
