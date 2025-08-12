@@ -17,6 +17,7 @@ public class MatchableGrid : GridSystem<Matchable>
     // The pool of Matchables with which to populate the grid
     private MatchablePool pool;
     private ScoreManager score;
+    private HintIndicator hint;
 
     // A distance offscreen where the matchables will spawn
     [SerializeField] private Vector3 offscreenOffset;
@@ -30,6 +31,7 @@ public class MatchableGrid : GridSystem<Matchable>
     {
         pool = (MatchablePool) MatchablePool.Instance;
         score = ScoreManager.Instance;
+        hint = HintIndicator.Instance;
     }
 
     
@@ -156,6 +158,9 @@ public class MatchableGrid : GridSystem<Matchable>
         Matchable[] copies = new Matchable[2];
         copies[0] = toBeSwapped[0];
         copies[1] = toBeSwapped[1];
+
+        // hide the hint indicator
+        hint.CancelHint();
 
         // yield until matchables animate swapping
         yield return StartCoroutine(Swap(copies));
@@ -468,7 +473,8 @@ public class MatchableGrid : GridSystem<Matchable>
         }
         else
         {
-             // offer a hint 
+            // offer a hint
+            hint.EnableHintButton();
         }
     }
 
@@ -608,6 +614,12 @@ public class MatchableGrid : GridSystem<Matchable>
         
         return false;
     }
+    // show a hint to the player
+    public void ShowHint()
+    {
+        hint.IndicateHint(possibleMoves[Random.Range(0, possibleMoves.Count)].transform);
+    }
+
 
 }
 
