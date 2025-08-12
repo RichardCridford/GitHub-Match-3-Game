@@ -454,11 +454,22 @@ public class MatchableGrid : GridSystem<Matchable>
             // rescursive routine  
             StartCoroutine(FillAndScanGrid());
 
+        // if no chain reactions, grid is idle, so check for possible moves
+        else
+            CheckPossibleMoves();
+    }
+
+    public void CheckPossibleMoves()
+    {
+        if (ScanForMoves() == 0)
+        {
+            // no moves!
+            GameManager.Instance.NoMoreMoves();
+        }
         else
         {
-            ScanForMoves();
+             // offer a hint 
         }
-
     }
 
     private void CollapseGrid()

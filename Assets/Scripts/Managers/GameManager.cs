@@ -50,6 +50,16 @@ public class GameManager : Singleton<GameManager>
 
         // remove the loading screen here
 
+        // check for grid lock and offer the player a hint if they need it.
+        grid.CheckPossibleMoves();
+       }
 
+    public void NoMoreMoves()
+    {
+        // game over?
+        //print("NO MORE MOVES!\nGAME OVER!");
+
+        // reward the player?
+        grid.MatchEverything();
     }
 }
