@@ -474,7 +474,9 @@ public class MatchableGrid : GridSystem<Matchable>
         else
         {
             // offer a hint
-            hint.EnableHintButton();
+            //hint.EnableHintButton();
+
+            hint.StartAutoHint(possibleMoves[Random.Range(0, possibleMoves.Count)].transform);
         }
     }
 
