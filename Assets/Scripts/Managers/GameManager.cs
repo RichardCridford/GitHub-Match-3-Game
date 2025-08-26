@@ -16,6 +16,9 @@ public class GameManager : Singleton<GameManager>
     private Cursor cursor;
     private AudioMixer audioMixer;
 
+    [SerializeField]
+    private Fader loadingScreen;
+
     // the dimensions of the matchable grid, set in the inspector
     [SerializeField] private Vector2Int dimensions = Vector2Int.one;
 
@@ -40,8 +43,9 @@ public class GameManager : Singleton<GameManager>
     {
         // disable user input
         cursor.enabled = false;
-        
-        //put in a loading screne here   
+
+        //unhide loading screen
+        loadingScreen.Hide(false);
         
         // pool the matchables 
         // size of the pool is based on a worst case scenario of all the matchables matching at the same time
@@ -52,22 +56,22 @@ public class GameManager : Singleton<GameManager>
         grid.InitializeGrid(dimensions);
 
         // fade out loading screen
+        StartCoroutine(loadingScreen.Fade(0));
 
         // start background music
         audioMixer.PlayMusic();
 
-        // enable user input
-        cursor.enabled = true;
-
-        yield return null;
-
-        StartCoroutine(grid.PopulateGrid(false, true));
+        
+        // populate the grid
+        yield return StartCoroutine(grid.PopulateGrid(false, true));
 
         
-
         // check for grid lock and offer the player a hint if they need it.
         grid.CheckPossibleMoves();
-       }
+
+        // enable user input
+        cursor.enabled = true;
+    }
 
     public void NoMoreMoves()
     {
