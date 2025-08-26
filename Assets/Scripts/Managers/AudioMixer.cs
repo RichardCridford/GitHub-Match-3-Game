@@ -6,7 +6,7 @@ public enum SoundEffects
 { 
     land,
     swap,
-    reolve,
+    resolve,
     upgrade,
     powerup,
     score

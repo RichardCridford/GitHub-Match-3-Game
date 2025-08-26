@@ -20,6 +20,7 @@ public class ScoreManager : Singleton<ScoreManager>
 {
     private MatchablePool pool;
     private MatchableGrid grid;
+    private AudioMixer audioMixer;
 
     [SerializeField]
     private Transform collectionPoint;
@@ -63,6 +64,7 @@ public class ScoreManager : Singleton<ScoreManager>
     {
         pool = (MatchablePool) MatchablePool.Instance;
         grid = (MatchableGrid) MatchableGrid.Instance;
+        audioMixer = AudioMixer.Instance;
 
         comboText.enabled = false;
         comboSlider.gameObject.SetActive(false);
@@ -78,6 +80,9 @@ public class ScoreManager : Singleton<ScoreManager>
 
         if (!timerIsActive)
             StartCoroutine(ComboTimer());
+
+        // play score sound
+        audioMixer.PlaySound(SoundEffects.score);
     }
 
     // Combo timer coroutine, counts up to max combo time before resetting the combo multiplier
@@ -132,11 +137,19 @@ public class ScoreManager : Singleton<ScoreManager>
             target = powerupFormed.transform;
 
             powerupFormed.SortingOrder = 3;
+
+            // play upgrade sound
+            audioMixer.PlaySound(SoundEffects.upgrade);
+        }
+        else
+        {
+            // play resolve sound
+            audioMixer.PlaySound(SoundEffects.resolve);
         }
 
 
-            // iterate through every matchable in a match
-            for (int i = 0; i != toResolve.Count; ++i)
+        // iterate through every matchable in a match
+        for (int i = 0; i != toResolve.Count; ++i)
             {
                 matchable = toResolve.Matchables[i];
 
@@ -144,7 +157,7 @@ public class ScoreManager : Singleton<ScoreManager>
                 // it can stay on the grid until the player decides to use it
                 if (powerupUsed != MatchType.match5 && matchable.isGem)
                     continue;
-            
+
 
 
                 // remove the matchables from the grid 
