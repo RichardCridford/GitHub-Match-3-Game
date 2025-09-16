@@ -74,7 +74,7 @@ public class ScoreManager : Singleton<ScoreManager>
     public void AddScore(int amount)
     {
         score += amount * IncreaseCombo();
-        scoreText.text = "Score : " + score;
+        scoreText.text = score.ToString();
 
         timeSinceLastScore = 0;
 
