@@ -23,13 +23,16 @@ public class MenuManager : MonoBehaviour
     private IEnumerator StartSurvivalGame()
     {
         yield return StartCoroutine(loadingScreen.Fade(1));
+        SceneManager.LoadScene("Survival");
         
     }
 
     private IEnumerator StartTimeRushGame()
     {
         yield return StartCoroutine(loadingScreen.Fade(1));
-       
+        SceneManager.LoadScene("Time Rush");
+
+
     }
 
     public void QuitButtonPressed()
