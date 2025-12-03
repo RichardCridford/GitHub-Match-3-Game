@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 /*
  * This class will setup the scene and initialize objects
@@ -80,5 +81,15 @@ public class GameManager : Singleton<GameManager>
 
         // reward the player?
         grid.MatchEverything();
+    }
+
+    private IEnumerator Quit()
+    {
+        yield return StartCoroutine(loadingScreen.Fade(1));
+        SceneManager.LoadScene("Main Menu");
+    }
+    public void QuitButtonPressed()
+    {
+        StartCoroutine(Quit());
     }
 }
