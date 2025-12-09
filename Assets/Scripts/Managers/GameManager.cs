@@ -76,11 +76,26 @@ public class GameManager : Singleton<GameManager>
 
     public void NoMoreMoves()
     {
+        GameOver();
+        
         // game over?
         //print("NO MORE MOVES!\nGAME OVER!");
 
         // reward the player?
-        grid.MatchEverything();
+        //grid.MatchEverything();
+    }
+
+    public void GameOver()
+    { 
+        // get and update the final score for the results page
+
+        // disable the cursor
+
+        // unhide the darkener and fade in
+
+        // move the results page onto the screen
+    
+    
     }
 
     private IEnumerator Quit()
