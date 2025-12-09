@@ -16,9 +16,17 @@ public class GameManager : Singleton<GameManager>
     private MatchableGrid grid;
     private Cursor cursor;
     private AudioMixer audioMixer;
+    private ScoreManager score;
 
     [SerializeField]
-    private Fader loadingScreen;
+    private Fader loadingScreen,
+                    darkener;
+
+    [SerializeField]
+    private Text finalScoreText;
+
+    [SerializeField]
+    private Movable resultsPage;
 
     // the dimensions of the matchable grid, set in the inspector
     [SerializeField] private Vector2Int dimensions = Vector2Int.one;
@@ -35,6 +43,7 @@ public class GameManager : Singleton<GameManager>
         grid = (MatchableGrid) MatchableGrid.Instance;
         cursor = Cursor.Instance;
         audioMixer = AudioMixer.Instance;
+        score = ScoreManager.Instance;
 
         //Setup the scene
         StartCoroutine(Setup());
@@ -88,13 +97,17 @@ public class GameManager : Singleton<GameManager>
     public void GameOver()
     { 
         // get and update the final score for the results page
+        finalScoreText.text = score.Score.ToString();
 
         // disable the cursor
+        cursor.enabled = false;
 
         // unhide the darkener and fade in
+        darkener.Hide(false);
+        StartCoroutine(darkener.Fade(0.75f));
 
-        // move the results page onto the screen
-    
+        // move the results page onto the centre of the screen by dividing the screen width and height by 2 
+        StartCoroutine(resultsPage.MoveToPosition(new Vector2(Screen.width /2, Screen.height / 2)));
     
     }
 
@@ -106,5 +119,19 @@ public class GameManager : Singleton<GameManager>
     public void QuitButtonPressed()
     {
         StartCoroutine(Quit());
+    }
+
+    private IEnumerator Retry()
+    {
+        // Reset the cursor, game grid and score
+
+        // Fade out the darkener, and moe the results page off screen
+        
+        
+        yield return null;
+    }
+    public void RetryButtonPressed()
+    {
+        StartCoroutine(Retry());
     }
 }
