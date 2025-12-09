@@ -70,6 +70,15 @@ public class ScoreManager : Singleton<ScoreManager>
         comboSlider.gameObject.SetActive(false);
     }
 
+    // when the player hits retry, resets the score and combo multiplier
+    public void Reset()
+    {
+        score = 0;
+        scoreText.text = scoreText.text = score.ToString();
+        timeSinceLastScore = maxComboTime;
+
+    }
+
     // add an amount to the score and update the UI Text
     public void AddScore(int amount)
     {

@@ -34,6 +34,7 @@ public class GameManager : Singleton<GameManager>
     // a UI Text Object for displaying the contents of the grid data
     // for testing and debugging purposes only 
     [SerializeField] private Text gridOutput;
+    [SerializeField] private bool debugMode;
 
     
     private void Start()
@@ -47,6 +48,13 @@ public class GameManager : Singleton<GameManager>
 
         //Setup the scene
         StartCoroutine(Setup());
+    }
+
+    // Remember to comment this out before building!
+    private void Update()
+    {
+        if (debugMode && Input.GetButtonDown("Jump"))
+            NoMoreMoves();
     }
 
     private IEnumerator Setup()
@@ -123,12 +131,20 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator Retry()
     {
-        // Reset the cursor, game grid and score
-
         // Fade out the darkener, and moe the results page off screen
-        
-        
-        yield return null;
+        StartCoroutine(resultsPage.MoveToPosition(new Vector2(Screen.width / 2, Screen.height / 2) + Vector2.down * 1000));
+        yield return StartCoroutine(darkener.Fade(0));
+        darkener.Hide(true);
+
+
+        // Reset the cursor, game grid and score
+        cursor.Reset();
+        score.Reset();
+
+        yield return StartCoroutine(grid.Reset());
+
+        // let the player start playing again
+        cursor.enabled = true;
     }
     public void RetryButtonPressed()
     {

@@ -36,6 +36,16 @@ public class MatchableGrid : GridSystem<Matchable>
         audioMixer = AudioMixer.Instance;
     }
 
+    // when the player hit retry, wipe the board and then repopulate
+    public IEnumerator Reset()
+    {
+        for (int y = 0; y != Dimensions.y; ++y)
+            for (int x = 0; x != Dimensions.x; ++x)
+                if (!IsEmpty(x, y))
+                    pool.ReturnObjectToPool(RemoveItemAt(x, y));
+
+        yield return StartCoroutine(PopulateGrid(false , true));
+    }
     
     // Populate the grid with matchables from the pool
     // Optionally allow or not allow matches when populating
