@@ -2570,7 +2570,7 @@ GameObject:
   - component: {fileID: 1242151598}
   - component: {fileID: 1242151597}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: Timer Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2876,6 +2876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37e86921956dcf54281daaff67c026fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timerText: {fileID: 1242151597}
 --- !u!1 &1293189477
 GameObject:
   m_ObjectHideFlags: 0
