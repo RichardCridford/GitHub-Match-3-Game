@@ -2378,7 +2378,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'No More Moves!
+  m_Text: 'Time''s Up!
 
 '
 --- !u!222 &1111433736
@@ -2946,6 +2946,9 @@ MonoBehaviour:
   darkener: {fileID: 1439355319}
   finalScoreText: {fileID: 61466016}
   resultsPage: {fileID: 1722515884}
+  levelisTimed: 1
+  timer: {fileID: 1278899559}
+  timeLimit: 5
   dimensions: {x: 7, y: 7}
   gridOutput: {fileID: 1231840740}
   debugMode: 1

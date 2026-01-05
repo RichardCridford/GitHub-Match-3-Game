@@ -28,6 +28,15 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private Movable resultsPage;
 
+    [SerializeField]
+    private bool levelisTimed;
+
+    [SerializeField]
+    private LevelTimer timer;
+
+    [SerializeField]
+    private float timeLimit;
+
     // the dimensions of the matchable grid, set in the inspector
     [SerializeField] private Vector2Int dimensions = Vector2Int.one;
 
@@ -64,6 +73,11 @@ public class GameManager : Singleton<GameManager>
 
         //unhide loading screen
         loadingScreen.Hide(false);
+
+        // if level is timed, set the timer 
+        if(levelisTimed)
+            timer.SetTimer(timeLimit);
+
         
         // pool the matchables 
         // size of the pool is based on a worst case scenario of all the matchables matching at the same time
@@ -89,11 +103,20 @@ public class GameManager : Singleton<GameManager>
 
         // enable user input
         cursor.enabled = true;
+
+        if (levelisTimed)
+            StartCoroutine(timer.Countdown()); 
     }
 
     public void NoMoreMoves()
     {
-        GameOver();
+        // if the level is timed, reward the player for running out of moves
+        if (levelisTimed)
+            grid.MatchEverything();
+        
+        // In survival mode, punish the player for running out of moves
+        else
+            GameOver();
         
         // game over?
         //print("NO MORE MOVES!\nGAME OVER!");
@@ -138,6 +161,9 @@ public class GameManager : Singleton<GameManager>
 
 
         // Reset the cursor, game grid and score
+        // if level is timed, set the timer 
+        if (levelisTimed)
+            timer.SetTimer(timeLimit);
         cursor.Reset();
         score.Reset();
 
@@ -145,6 +171,10 @@ public class GameManager : Singleton<GameManager>
 
         // let the player start playing again
         cursor.enabled = true;
+
+        // if level is timed, start timer
+        if (levelisTimed)
+            StartCoroutine(timer.Countdown());
     }
     public void RetryButtonPressed()
     {
