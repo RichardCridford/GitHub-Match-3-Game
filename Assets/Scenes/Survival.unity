@@ -1323,7 +1323,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 255, y: 220}
-  m_SizeDelta: {x: 75, y: 75}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &489100657
 MonoBehaviour:
@@ -2777,6 +2777,9 @@ MonoBehaviour:
   darkener: {fileID: 1439355319}
   finalScoreText: {fileID: 61466016}
   resultsPage: {fileID: 1722515884}
+  levelisTimed: 0
+  timer: {fileID: 0}
+  timeLimit: 0
   dimensions: {x: 7, y: 7}
   gridOutput: {fileID: 1231840740}
   debugMode: 1
@@ -3279,7 +3282,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -260, y: 220}
-  m_SizeDelta: {x: 75, y: 75}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1582975311
 MonoBehaviour:
