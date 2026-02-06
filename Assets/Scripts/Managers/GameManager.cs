@@ -60,11 +60,11 @@ public class GameManager : Singleton<GameManager>
     }
 
     // Remember to comment this out before building!
-    private void Update()
-    {
-        if (debugMode && Input.GetButtonDown("Jump"))
-            NoMoreMoves();
-    }
+    //private void Update()
+    //{
+        //if (debugMode && Input.GetButtonDown("Jump"))
+            //NoMoreMoves();
+    //}
 
     private IEnumerator Setup()
     {
